@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-# Script is an adaptation of the one on http://journal.code4lib.org/articles/7949
+# The Script is an adaptation of the one discussed on http://journal.code4lib.org/articles/7949
 
 import json
 import subprocess
