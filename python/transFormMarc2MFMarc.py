@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
 
-__author__ = 'swissbib'
+__author__ = "Günter Hipler"
+__copyright__ = "Copyright 2015, swissbib project, UB Basel"
+__license__ = "http://opensource.org/licenses/gpl-2.0.php"
+__version__ = "2.0"
+__maintainer__ = "Günter Hipler"
+__email__ = "guenter.hipler@unibas.ch"
+__status__ = "development"
 
 import re
 from argparse import ArgumentParser
@@ -8,9 +14,10 @@ from argparse import ArgumentParser
 #inputFile = "data/job1r109A090.format.xml"
 #outputFile = 'data/correctMarcXML.xml'
 
-#simple script to insert an additional type attribute. Background:
-#because Metafacture requires a type attribute in the record element -which isn't provided by CBS so far - we need to insert this attribute in the records exported by swissbib
-
+"""
+simple script to insert an additional type attribute. Background:
+because Metafacture requires a type attribute in the record element -which isn't provided by CBS so far - we need to insert this attribute in the records exported by swissbib
+"""
 
 
 oParser = ArgumentParser()
