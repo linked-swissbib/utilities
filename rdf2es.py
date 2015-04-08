@@ -7,8 +7,9 @@ import subprocess
 import argparse
 import elasticsearch
 import re
+import pprint
 from pyld import jsonld
-from sys import exit
+from http import client
 
 
 parser = argparse.ArgumentParser(description="Indexing RDF file in Elasticsearch")
@@ -27,40 +28,48 @@ parser.add_argument('--format', metavar='<format>', dest='format', type=str,
                     'rss-tag-soup', 'grddl', 'rdfa', 'json', 'nquads' and 'guess'. Defaults to 'turtle'.''')
 parser.add_argument('--docs', metavar='<number>', dest='docs', type=int, default=50,
                     help='Maximum number of documents to be processed at the same time. Defaults to 20.')
+parser.add_argument('--output', metavar='<filename>', dest='output', type=str,
+                    help='''Outputs JSON-LD documents to file instead of indexing in Elasticsearch.''')
+
 args = parser.parse_args()
 
-print("Parsing RDF file")
-nquads = subprocess.check_output(['rapper', '-i', args.format, '-o', 'nquads', args.ifile],
-                                 universal_newlines=True)
-
-print("Sequencing RDF file")
-# Search for subjects in nquad triples
-pattern = re.compile('^(<.*?>)', re.MULTILINE)
-subjects = pattern.findall(nquads)
-# Identify row numbers of new subjects
-newdoc = {0}
-i = 1
-for subj in subjects[0:len(subjects)-2]:
-    if subj != subjects[i]:
-        newdoc.add(i)
-    i += 1
-# Get offsets of linebreaks. First token of new line begins at index offset + 1, last token is at index <next offset>
-offsets = [-1]
-offsets.extend([m.start() for m in re.finditer('\n', nquads)])
-offsets.append(len(nquads)-1)
-# newdoc serves as an index to offsets list: newdoc[0] signifies offset=0, newdoc[len(offsets)-1] means very last token
-# of nquads.
-newdoc.add(len(offsets) - 1)
-newdoc = sorted(list(newdoc))
-# Connect to Elasticsearch
 try:
-    es = elasticsearch.Elasticsearch([{'host': args.host, 'port': args.port}])
-except elasticsearch.ConnectionError:
-    exit("Error: Could not connect to search server.")
+    if args.output is None:
+        # Connect to Elasticsearch
+        of = elasticsearch.Elasticsearch([{'host': args.host, 'port': args.port}])
+        h1 = client.HTTPConnection(args.host, args.port)
+        h1.connect()
+        h1.close()
+    else:
+        of = open(args.output, mode='x')
+except Exception as inst:
+    print("Error:", inst.args[1])
 else:
+    print("Parsing RDF file")
+    nquads = subprocess.check_output(['rapper', '-i', args.format, '-o', 'nquads', args.ifile],
+                                     universal_newlines=True)
+    print("Sequencing RDF file")
+    # Search for subjects in nquad triples
+    pattern = re.compile('^(<.*?>)', re.MULTILINE)
+    subjects = pattern.findall(nquads)
+    # Identify row numbers of new subjects
+    newdoc = {0}
+    i = 1
+    for subj in subjects[0:len(subjects)-2]:
+        if subj != subjects[i]:
+            newdoc.add(i)
+        i += 1
+    # Get offsets of linebreaks. First token of new line begins at index offset + 1,
+    # last token is at index <next offset>
+    offsets = [-1]
+    offsets.extend([m.start() for m in re.finditer('\n', nquads)])
+    offsets.append(len(nquads)-1)
+    # newdoc serves as an index to offsets list: newdoc[0] signifies offset=0,
+    # newdoc[len(offsets)-1] means very last token of nquads.
+    newdoc.add(len(offsets) - 1)
+    newdoc = sorted(list(newdoc))
     # Extract tokens from offset + 1 to <n-th offset after> (n = args.docs)
     i = 0
-
     while i < len(newdoc) - 1:
         if i + args.docs >= len(newdoc) - 1:
             j = len(newdoc) - 1
@@ -79,4 +88,9 @@ else:
         total = len(compacted["@graph"])
         for graph in compacted["@graph"]:
             graph["@context"] = compacted["@context"]
-            res = es.index(index=args.index, doc_type=args.type, body=graph)
+            if args.output is None:
+                res = of.index(index=args.index, doc_type=args.type, body=graph)
+            else:
+                pprint.pprint(graph, stream=of)
+    if args.output is not None:
+        of.close()
