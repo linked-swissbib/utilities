@@ -15,12 +15,11 @@ import sys
 
 class Rdf2JsonLD:
 
-    def __init__(self, ifile, frame, rdfformat, docs, mapping):
+    def __init__(self, ifile, frame, rdfformat, docs):
         self.ifile = ifile
         self.frame = frame
         self.format = rdfformat
         self.docs = docs
-        self.map = mapping
         self.nquads = str()
         self.offsets = list()
         self.newdoc = list()
@@ -80,10 +79,11 @@ class Rdf2JsonLD:
 
 class JsonLD2ES(Rdf2JsonLD):
 
-    def __init__(self, ifile, frame, esindex, estype, rdfformat, docs, mapping, host, port):
-        Rdf2JsonLD.__init__(self, ifile, frame, rdfformat, docs, mapping)
+    def __init__(self, ifile, frame, rdfformat, docs, esindex, estype, mapping, host, port):
+        Rdf2JsonLD.__init__(self, ifile, frame, rdfformat, docs)
         self.index = esindex
         self.type = estype
+        self.map = mapping
         try:
             self.of = elasticsearch.Elasticsearch([{'host': host, 'port': port}])
             h1 = client.HTTPConnection(host, port)
@@ -98,8 +98,8 @@ class JsonLD2ES(Rdf2JsonLD):
 
 class JsonLD2File(Rdf2JsonLD):
 
-    def __init__(self, ifile, frame, rdfformat, docs, mapping, ofile):
-        Rdf2JsonLD.__init__(self, ifile, frame, rdfformat, docs, mapping)
+    def __init__(self, ifile, frame, rdfformat, docs, ofile):
+        Rdf2JsonLD.__init__(self, ifile, frame, rdfformat, docs)
         try:
             self.of = open(ofile, mode='x')
         except Exception as inst:
@@ -138,10 +138,10 @@ if __name__ == '__main__':
     if args.output is None:
         obj = JsonLD2ES(ifile=args.ifile,
                         frame=args.frame,
-                        esindex=args.index,
-                        estype=args.type,
                         rdfformat=args.format,
                         docs=args.docs,
+                        esindex=args.index,
+                        estype=args.type,
                         mapping=args.map,
                         host=args.host,
                         port=args.port)
@@ -150,7 +150,6 @@ if __name__ == '__main__':
                           frame=args.frame,
                           rdfformat=args.format,
                           docs=args.docs,
-                          mapping=args.map,
                           ofile=args.output)
     obj.parserdf()
     obj.sequencerdf()
