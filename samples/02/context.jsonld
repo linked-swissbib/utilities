@@ -1,0 +1,46 @@
+{
+  "@context": {
+    "bibliographicResource": "http://purl.org/dc/terms/BibliographicResource",
+    "isDefinedBy": {
+      "@id": "http://www.w3.org/2000/01/rdf-schema#isDefinedBy",
+      "@type": "@id"
+    },
+    "contributor": {
+      "@id": "http://purl.org/dc/elements/1.1/contributor",
+      "@type": "@id"
+    },
+    "format": "http://purl.org/dc/elements/1.1/format",
+    "hasPart": "http://purl.org/dc/terms/hasPart",
+    "issued": "http://purl.org/dc/terms/issued",
+    "language": {
+      "@id": "http://purl.org/dc/terms/language",
+      "@type": "@id"
+    },
+    "title": {
+      "@id": "http://purl.org/dc/terms/title",
+      "@type": "@id"
+    },
+    "contentType": {
+      "@id": "http://rdaregistry.info/Elements/u/contentType",
+      "@type": "@id"
+    },
+    "mediaType": {
+      "@id": "http://rdaregistry.info/Elements/u/mediaType",
+      "@type": "@id"
+    },
+    "placeOfPublication": {
+      "@id": "http://rdaregistry.info/Elements/u/placeOfPublication",
+      "@type": "@id"
+    },
+    "publicationStatement": "http://rdaregistry.info/Elements/u/publicationStatement",
+    "isbn10": "http://purl.org/ontology/bibo/isbn10",
+    "isbn13": "http://purl.org/ontology/bibo/isbn13",
+    "noteOnResource": "http://rdaregistry.info/Elements/u/noteOnResource",
+    "edition": "http://purl.org/ontology/bibo/edition",
+    "bibliographicCitation": "http://purl.org/dc/terms/bibliographicCitation",
+    "isPartOf": {
+      "@id": "http://purl.org/dc/terms/isPartOf",
+      "@type": "@id"
+    }
+  }
+}
