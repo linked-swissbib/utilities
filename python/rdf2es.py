@@ -5,7 +5,7 @@
 import json
 import subprocess
 import argparse
-import elasticsearch
+from elasticsearch import Elasticsearch
 import re
 import pprint
 from pyld import jsonld
@@ -85,14 +85,25 @@ class JsonLD2ES(Rdf2JsonLD):
         self.type = estype
         self.map = mapping
         try:
-            self.of = elasticsearch.Elasticsearch([{'host': host, 'port': port}])
             h1 = client.HTTPConnection(host, port)
             h1.connect()
             h1.close()
+            self.of = Elasticsearch([{'host': host, 'port': port}])
+            if self.of.indices.exists(self.index):
+                raise Exception('Error', 'Elasticsearch index already exists.')
         except Exception as inst:
-            sys.exit("Error:" + inst.args[1])
+            sys.exit("Error: " + inst.args[1])
+        else:
+            self.of.indices.create(self.index)
 
     def output(self, doc):
+        if self.map is not None:
+            try:
+                mapping = json.load(open(self.map, 'r'))
+                mapping = {self.type: mapping}
+            except FileNotFoundError as inst:
+                sys.exit("Error: " + inst.args[1])
+            self.of.indices.put_mapping(doc_type=self.type, body=mapping)
         self.of.index(index=self.index, doc_type=self.type, body=doc)
 
 
@@ -103,7 +114,7 @@ class JsonLD2File(Rdf2JsonLD):
         try:
             self.of = open(ofile, mode='x')
         except Exception as inst:
-            sys.exit("Error:" + inst.args[1])
+            sys.exit("Error: " + inst.args[1])
 
     def output(self, doc):
         pprint.pprint(doc, stream=self.of)
