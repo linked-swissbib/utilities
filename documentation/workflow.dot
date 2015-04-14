@@ -1,0 +1,31 @@
+digraph workflow {
+
+// rankdir=LR;
+compound=true;
+
+node [color=Red];
+edge [color=Blue];
+
+input->rapper [label="Input for"];
+rapper->nquads [label="Converts to"];
+redland->rapper [label="Provides"]
+nquads->extended
+
+subgraph pyscript {
+label="rdf2es.py";
+subgraph rdftransformation {
+label="RDF Transformation";
+rank=same;
+input [label="RDF-Triple", shape=box];
+rapper [label="Rapper"];
+nquads [label="Nquads", shape=box];
+}
+subgraph jsonldtransformation {
+label="JSON-LD Transformation";
+rank=same;
+extended [label="JSON-LD Extended Document Form", shape=box];
+compacted [label="JSON-LD Compacted Document Form", shape=box];
+}
+}
+
+}
