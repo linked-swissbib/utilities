@@ -10,6 +10,10 @@ from elasticsearch import Elasticsearch
 from pprint import pprint
 
 def rcr(index='itest01', type='ttest01', id='dtest01'):
+    """
+    Demonstrates the retrieve-change-reindex cycle for updating
+    a document in Elasticsearch.
+    """
     body = '{"alist": ["element1"]}'
     es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
     es.index(index=index, doc_type=type, id=id, body=body)
@@ -23,6 +27,10 @@ def rcr(index='itest01', type='ttest01', id='dtest01'):
     pprint(res)
 
 def updateapi(index='itest01', type='ttest01', id='dtest01'):
+    """
+    Demonstrates the use of the Update API for updating
+    a document in Elasticsearch.
+    """
     body = '{"alist": ["element1"]}'
     es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
     es.index(index=index, doc_type=type, id=id, body=body)
