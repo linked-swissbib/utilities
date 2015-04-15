@@ -9,18 +9,21 @@ __email__ = 'sebastian.schuepbach@unibas.ch'
 __status__ = 'development'
 
 """
-The Script is an adaptation of the one discussed on http://journal.code4lib.org/articles/7949
+Parses serialized RDF triples, converts them to JSON-LD in extended document format
+by providing a context file and finally either outputs the result as a file or loads it
+into an Elasticsearch index.
+The Script is inspired by the article on http://journal.code4lib.org/articles/7949
 """
 
-import json
-import subprocess
 import argparse
-from elasticsearch import Elasticsearch
 import re
-import pprint
+from json import load
+from subprocess import check_output
+from elasticsearch import Elasticsearch
+from pprint import pprint
 from pyld import jsonld
 from http import client
-import sys
+from sys import exit
 from os import path
 
 
@@ -38,8 +41,11 @@ class Rdf2JsonLD:
 
     def parserdf(self):
         print("Parsing RDF file")
-        self.nquads = subprocess.check_output(['rapper', '-i', self.format, '-o', 'nquads', self.ifile],
-                                              universal_newlines=True)
+        self.nquads = check_output(['rapper', '-i', self.format, '-o', 'nquads', self.ifile],
+                                   universal_newlines=True)
+        # As rapper returns an ASCII-encoded string, a conversion back to UTF-8 is required.
+        self.nquads = self.nquads.encode('ascii')
+        self.nquads = self.nquads.decode('raw_unicode_escape')
 
     def sequencerdf(self):
         print("Sequencing RDF file")
@@ -82,7 +88,7 @@ class Rdf2JsonLD:
             # The compacted JSON-LD document form offers the possibility to include a context
             # (i.e. namespaces) and thus reduces redundancy
             print("Converting to compacted document form")
-            compacted = jsonld.compact(expand, json.load(open(self.frame, 'r')))
+            compacted = jsonld.compact(expand, load(open(self.frame, 'r')))
             print("Indexing documents")
             for graph in compacted["@graph"]:
                 if self.extcont is True:
@@ -107,18 +113,19 @@ class JsonLD2ES(Rdf2JsonLD):
             if self.of.indices.exists(self.index):
                 raise Exception('Error', 'Elasticsearch index already exists.')
         except Exception as inst:
-            sys.exit("Error: " + inst.args[1])
+            exit("Error: " + inst.args[1])
         else:
             self.of.indices.create(self.index)
 
     def output(self, doc):
         if self.map is not None:
             try:
-                mapping = json.load(open(self.map, 'r'))
+                mapping = load(open(self.map, 'r'))
                 mapping = {self.type: mapping}
             except FileNotFoundError as inst:
-                sys.exit("Error: " + inst.args[1])
-            self.of.indices.put_mapping(doc_type=self.type, body=mapping)
+                exit("Error: " + inst.args[1])
+            else:
+                self.of.indices.put_mapping(doc_type=self.type, body=mapping)
         self.of.index(index=self.index, doc_type=self.type, body=doc)
 
 
@@ -129,10 +136,10 @@ class JsonLD2File(Rdf2JsonLD):
         try:
             self.of = open(ofile, mode='x')
         except Exception as inst:
-            sys.exit("Error: " + inst.args[1])
+            exit("Error: " + inst.args[1])
 
     def output(self, doc):
-        pprint.pprint(doc, stream=self.of)
+        pprint(doc, stream=self.of)
 
     def __del__(self):
         self.of.close()
