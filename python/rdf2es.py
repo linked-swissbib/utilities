@@ -1,6 +1,16 @@
 #!/usr/bin/python3
 
-# The Script is an adaptation of the one discussed on http://journal.code4lib.org/articles/7949
+__author__ = 'Sebastian Schüpbach'
+__copyright__ = 'Copyright 2015, swissbib project, UB Basel'
+__license__ = 'http://opensource.org/licenses/gpl-2.0.php'
+__version__ = '1.0'
+__maintainer__ = 'Sebastian Schüpbach'
+__email__ = 'sebastian.schuepbach@unibas.ch'
+__status__ = 'development'
+
+"""
+The Script is an adaptation of the one discussed on http://journal.code4lib.org/articles/7949
+"""
 
 import json
 import subprocess
@@ -11,15 +21,17 @@ import pprint
 from pyld import jsonld
 from http import client
 import sys
+from os import path
 
 
 class Rdf2JsonLD:
 
-    def __init__(self, ifile, frame, rdfformat, docs):
+    def __init__(self, ifile, frame, rdfformat, docs, extcont):
         self.ifile = ifile
         self.frame = frame
         self.format = rdfformat
         self.docs = docs
+        self.extcont = extcont
         self.nquads = str()
         self.offsets = list()
         self.newdoc = list()
@@ -73,14 +85,17 @@ class Rdf2JsonLD:
             compacted = jsonld.compact(expand, json.load(open(self.frame, 'r')))
             print("Indexing documents")
             for graph in compacted["@graph"]:
-                graph["@context"] = compacted["@context"]
+                if self.extcont is True:
+                    graph["@context"] = path.abspath(args.frame)
+                else:
+                    graph["@context"] = compacted["@context"]
                 self.output(graph)
 
 
 class JsonLD2ES(Rdf2JsonLD):
 
-    def __init__(self, ifile, frame, rdfformat, docs, esindex, estype, mapping, host, port):
-        Rdf2JsonLD.__init__(self, ifile, frame, rdfformat, docs)
+    def __init__(self, ifile, frame, rdfformat, docs, extcont, esindex, estype, mapping, host, port):
+        Rdf2JsonLD.__init__(self, ifile, frame, rdfformat, docs, extcont)
         self.index = esindex
         self.type = estype
         self.map = mapping
@@ -109,8 +124,8 @@ class JsonLD2ES(Rdf2JsonLD):
 
 class JsonLD2File(Rdf2JsonLD):
 
-    def __init__(self, ifile, frame, rdfformat, docs, ofile):
-        Rdf2JsonLD.__init__(self, ifile, frame, rdfformat, docs)
+    def __init__(self, ifile, frame, rdfformat, docs, extcont, ofile):
+        Rdf2JsonLD.__init__(self, ifile, frame, rdfformat, docs, extcont)
         try:
             self.of = open(ofile, mode='x')
         except Exception as inst:
@@ -125,7 +140,7 @@ class JsonLD2File(Rdf2JsonLD):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Indexing RDF file in Elasticsearch")
-    parser.add_argument('ifile', metavar='<filename>', type=str, help='Path to ')
+    parser.add_argument('ifile', metavar='<filename>', type=str, help='Path to serialized RDF triples file')
     parser.add_argument('frame', metavar='<filename>', type=str, help='Path to JSON-LD frame file')
     parser.add_argument('--host', metavar='<ip>', type=str, default='localhost', help='Ip of search engine host')
     parser.add_argument('--port', metavar='<port>', type=int, default=9200, help='Port number of search engine')
@@ -144,6 +159,8 @@ if __name__ == '__main__':
                         help='Outputs JSON-LD documents to file instead of indexing in Elasticsearch.')
     parser.add_argument('--map', metavar='<filename>', dest='map', type=str,
                         help='File containing a special mapping for Elasticsearch indexing. ')
+    parser.add_argument('--extcont', metavar='<boolean>', dest='extcont', type=bool,
+                        choices=['True', 'False'], default=False, help='Embed context as link. Defaults to False')
     args = parser.parse_args()
 
     if args.output is None:
@@ -151,6 +168,7 @@ if __name__ == '__main__':
                         frame=args.frame,
                         rdfformat=args.format,
                         docs=args.docs,
+                        extcont=args.extcont,
                         esindex=args.index,
                         estype=args.type,
                         mapping=args.map,
@@ -161,6 +179,7 @@ if __name__ == '__main__':
                           frame=args.frame,
                           rdfformat=args.format,
                           docs=args.docs,
+                          extcont=args.extcont,
                           ofile=args.output)
     obj.parserdf()
     obj.sequencerdf()
