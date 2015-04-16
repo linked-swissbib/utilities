@@ -100,11 +100,12 @@ class Rdf2JsonLD:
 
 class JsonLD2ES(Rdf2JsonLD):
 
-    def __init__(self, ifile, frame, rdfformat, docs, extcont, esindex, estype, mapping, host, port):
+    def __init__(self, ifile, frame, rdfformat, docs, extcont,
+                 esindex, estype, indctrl, host, port):
         Rdf2JsonLD.__init__(self, ifile, frame, rdfformat, docs, extcont)
         self.index = esindex
         self.type = estype
-        self.map = mapping
+        self.indctrl = indctrl
         try:
             h1 = client.HTTPConnection(host, port)
             h1.connect()
@@ -115,17 +116,17 @@ class JsonLD2ES(Rdf2JsonLD):
         except Exception as inst:
             exit("Error: " + inst.args[1])
         else:
-            self.of.indices.create(self.index)
+            if self.indctrl is not None:
+                try:
+                    indctrl = load(open(self.indctrl, 'r'))
+                except FileNotFoundError as inst:
+                    exit("Error: " + inst.args[1])
+                else:
+                    self.of.indices.create(index=self.index, body=indctrl)
+            else:
+                self.of.indices.create(index=self.index)
 
     def output(self, doc):
-        if self.map is not None:
-            try:
-                mapping = load(open(self.map, 'r'))
-                mapping = {self.type: mapping}
-            except FileNotFoundError as inst:
-                exit("Error: " + inst.args[1])
-            else:
-                self.of.indices.put_mapping(doc_type=self.type, body=mapping)
         self.of.index(index=self.index, doc_type=self.type, body=doc)
 
 
@@ -164,10 +165,10 @@ if __name__ == '__main__':
                         help='Maximum number of documents to be processed at the same time. Defaults to 20.')
     parser.add_argument('--output', metavar='<filename>', dest='output', type=str,
                         help='Outputs JSON-LD documents to file instead of indexing in Elasticsearch.')
-    parser.add_argument('--map', metavar='<filename>', dest='map', type=str,
-                        help='File containing a special mapping for Elasticsearch indexing. ')
     parser.add_argument('--extcont', metavar='<boolean>', dest='extcont', type=bool,
                         choices=['True', 'False'], default=False, help='Embed context as link. Defaults to False')
+    parser.add_argument('--indctrl', metavar='<filename>', dest='indctrl', type=str,
+                        help='File containing settings and mappings for Elasticsearch indexing.')
     args = parser.parse_args()
 
     if args.output is None:
@@ -178,7 +179,7 @@ if __name__ == '__main__':
                         extcont=args.extcont,
                         esindex=args.index,
                         estype=args.type,
-                        mapping=args.map,
+                        indctrl=args.indctrl,
                         host=args.host,
                         port=args.port)
     else:
