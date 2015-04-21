@@ -1,6 +1,6 @@
 "Name"	"IRI"	"Type"	"Analyzed"	"Analyzer"
 "isDefinedBy"	"yes"	"string"	"not_analyzed"	
-"bibliographicCitation"	"no"	"string"	"analyzed"	
+"bibliographicCitation"	"no"	"string"	"analyzed"	"standard"
 "contentType"	"yes"	"string"	"not_analyzed"	
 "contributor10"	"no"	"string"	"analyzed"	
 "contributor11"	"no"	"string"	"analyzed"	
