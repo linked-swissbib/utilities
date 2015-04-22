@@ -1,31 +1,57 @@
 digraph workflow {
 
-// rankdir=LR;
-compound=true;
+node [color=Red,  fontname="sans italic", fontsize=10];
+edge [color=Blue, fontname="sans italic", fontsize=8];
+clusterrank="none";
 
-node [color=Red];
-edge [color=Blue];
+subgraph cluster0 {
+	label="rdf2es.py";
+
+	subgraph cluster1 {
+		label="RDF Transformation"; 
+		input [label="RDF-Triple", shape=box, style=filled, fillcolor=Red];
+		rapper [label="Rapper"];
+		nquads [label="Nquads", shape=box, style=filled, fillcolor=Red];
+	}
+
+	subgraph cluster2 {
+		label="JSON-LD Transformation";
+		extended [label="Extended JSON-LD", shape=box, style=filled, fillcolor=Red];
+		compacted [label="Compacted JSON-LD", shape=box, style=filled, fillcolor=Red];
+	}
+
+	subgraph cluster3 {
+		label="JSON-LD Indexing";
+		esindex [label="ES Index", shape=box, style=filled, fillcolor=Red];
+	}
+
+	subgraph cluster4 {
+		label="JSON-LD Serialization";
+		jsonldfile [label="Serialized JSON-LD", shape=box, style=filled, fillcolor=Red];
+	}
+
+}
+
+redland [label="Redland API", shape=box3d, color=blue];
+pyld [label="Module pyld", shape=box3d, color=blue];
+pyes [label="Module elasticsearch-py", shape=box3d, color=blue];
+tojsonld [label="jsonld.from_rdf"];
+exp2com [label="jsonld.compacted"];
+objindex [label="obj.index"];
+
+redland->rapper [label="Provides"];
+pyld->tojsonld [label="Provides"];
+pyld->exp2com [label="Provides"];
+pyes->objindex [label="Provides"];
 
 input->rapper [label="Input for"];
 rapper->nquads [label="Converts to"];
-redland->rapper [label="Provides"]
-nquads->extended
-
-subgraph pyscript {
-label="rdf2es.py";
-subgraph rdftransformation {
-label="RDF Transformation";
-rank=same;
-input [label="RDF-Triple", shape=box];
-rapper [label="Rapper"];
-nquads [label="Nquads", shape=box];
-}
-subgraph jsonldtransformation {
-label="JSON-LD Transformation";
-rank=same;
-extended [label="JSON-LD Extended Document Form", shape=box];
-compacted [label="JSON-LD Compacted Document Form", shape=box];
-}
-}
+nquads->tojsonld [label="Input for"];
+tojsonld->extended [label="Converts to"];
+extended->exp2com [label="Input for"];
+exp2com->compacted [label="Converts to"];
+compacted->objindex [label="Input for"];
+objindex->esindex [label="Loads into"];
+compacted->jsonldfile [label="Serializes to"];
 
 }
