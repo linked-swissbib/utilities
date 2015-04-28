@@ -199,7 +199,7 @@ class JsonLD2File(Rdf2JsonLD):
     def output(self, doc):
         """
         Outputs formatted string to file
-        :param doc
+        :param doc:
         """
         pprint(doc, stream=self.of)
 
