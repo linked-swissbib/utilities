@@ -1,0 +1,237 @@
+/*
+WARNING
+Since it contains comments this JSON-LD file is not compliant with the JSON standard.
+I.e. the comments must be removed before forwarded to Elasticsearch (e.g. by using JSMin)
+*/
+
+{
+  "settings": {
+    "analysis": {
+      "filter": {
+        /*
+        This token filter extracts strings of numbers (i.e. the ID) out of URLs
+        */
+        "get_id": {
+          "type": "pattern_capture",
+          "preserve_original": 1,
+          "patterns": ["/([0-9]{9})/"]
+        }
+      },
+      "analyzer": {
+        "extr_id": {
+          "type": "custom",
+          "tokenizer": "keyword", // Keeps the string as is
+          "filter": "get_id"
+        },
+        "text_folded": {
+          "type": "custom",
+          "tokenizer": "whitespace",
+          "filter": ["asciifolding"]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "rdf": {
+      // "dynamic": "strict", // Not explicitly mapped fields throw an error
+      "properties": {
+        /*
+        Context to be mapped
+        */
+        "@context": {
+          "properties": {
+            "isDefinedBy": {
+              "properties": {
+                "@type": {
+                  "type": "string",
+                  "index": "no"
+                },
+                "@id": {
+                  "type": "string",
+                  "index": "no"
+                }
+              }
+            },
+            "bibo": {
+              "type": "string",
+              "index": "no"
+            },
+            "dbp": {
+              "type": "string",
+              "index": "no"
+            },
+            "dc": {
+              "type": "string",
+              "index": "no"
+            },
+            "dct": {
+              "type": "string",
+              "index": "no"
+            },
+            "foaf": {
+              "type": "string",
+              "index": "no"
+            },
+            "rdau": {
+              "type": "string",
+              "index": "no"
+            },
+            "rdf": {
+              "type": "string",
+              "index": "no"
+            },
+            "rdfs": {
+              "type": "string",
+              "index": "no"
+            },
+            "skos": {
+              "type": "string",
+              "index": "no"
+            }
+          }
+        },
+        /*
+        The actual fields to be mapped
+        */
+        "@id": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "@type": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        /* "isPerson": {
+          "type": "nested",
+          "properties": {
+
+          }
+        } */
+        "dct:bibliographicCitation": {
+          "type": "string",
+          "index": "analyzed",
+          "analyzer": "standard"
+        },
+        "rdau:contentType": {
+          "properties": {
+            "@id": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        },
+        "dc:contributor": {
+          "properties": {
+            "@id": {
+              "type": "string",
+              "index": "analyzed"
+            }
+          }
+        },
+        "dct:contributor": {
+          "type": "string",
+          "index": "analyzed"
+        },
+        "bibo:edition": {
+          "type": "string",
+          "index": "analyzed"
+        },
+        "dct:alternative": {
+          "type": "string",
+          "index": "analyzed",
+          "fields": {
+            "folded": {
+              "type": "string",
+              "analyzer": "text_folded"
+            }
+          }
+        },
+        "dc:format": {
+          "type": "string",
+          "index": "analyzed"
+        },
+        "dct:hasPart": {
+          "type": "string",
+          "index": "analyzed"
+        },
+        "rdfs:isDefinedBy": {
+          "properties": {
+            "@id": {
+              "type": "string",
+              "index": "analyzed",
+              "analyzer": "extr_id"
+            }
+          }
+        },
+        "bibo:isbn10": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "bibo:isbn13": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "dct:issued": {
+          "type": "string",
+          "index": "analyzed"
+        },
+        "dct:language": {
+          "properties": {
+            "@id": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        },
+        "rdau:mediaType": {
+          "properties": {
+            "@id": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        },
+        "rdau:noteOnResource": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "rdau:publicationStatement": {
+          "type": "string",
+          "index": "analyzed",
+          "fields": {
+            "folded": {
+              "type": "string",
+              "analyzer": "text_folded"
+            }
+          }
+        },
+        "rdau:placeOfPublication": {
+          "properties": {
+            "@id": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        },
+        "dct:title": {
+          "type": "string",
+          "index": "analyzed",
+          "fields": {
+            "folded": {
+              "type": "string",
+              "analyzer": "text_folded"
+            }
+          }
+        },
+        "dct:isPartOf": {
+          "properties": {
+            "@id": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      }
+    }
+  }
+}

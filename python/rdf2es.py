@@ -123,6 +123,7 @@ class Rdf2JsonLD():
             # (i.e. namespaces) and thus reduces redundancy
             print("Converting to compacted document form")
             compacted = jsonld.compact(expand, self.loadjson(self.frame))
+            # TODO: Insert function to append data of contributors to the bibliographicResource
             print("Indexing documents")
             for graph in compacted["@graph"]:
                 if self.extcont is True:
@@ -165,7 +166,7 @@ class JsonLD2ES(Rdf2JsonLD):
             exit("Error: " + inst.args[1])
         else:
             if self.indctrl is not None:
-                indctrl = self.loadjson(self.frame)
+                indctrl = self.loadjson(self.indctrl)
                 self.of.indices.create(index=self.index, body=indctrl)
             else:
                 self.of.indices.create(index=self.index)
@@ -222,9 +223,9 @@ if __name__ == '__main__':
                         help='Name of Elasticsearch type. Defaults to \'rdf\'')
     parser.add_argument('--format', metavar='<format>', dest='format', type=str,
                         choices=['rdfxml', 'ntriples', 'turtle', 'trig', 'rss-tag-soup', 'grddl', 'guess',
-                                 'rdfa', 'json', 'nquads'], default='turtle',
-                        help='''Format of RDF file. Possible values are: rdfxml', 'ntriples', 'turtle', 'trig',
-                    'rss-tag-soup', 'grddl', 'rdfa', 'json', 'nquads' and 'guess'. Defaults to 'turtle'.''')
+                                 'rdfa', 'json', 'nquads'], default='rdfxml',
+                        help='''Format of RDF file. Possible values are: 'rdfxml', 'ntriples', 'turtle', 'trig',
+                    'rss-tag-soup', 'grddl', 'rdfa', 'json', 'nquads' and 'guess'. Defaults to 'rdfxml'.''')
     parser.add_argument('--docs', metavar='<int>', dest='docs', type=int, default=50,
                         help='Maximum number of documents to be processed at the same time. Defaults to 20.')
     parser.add_argument('--output', metavar='<filename>', dest='output', type=str,

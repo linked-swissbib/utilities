@@ -1,0 +1,48 @@
+/*
+WARNING
+Since it contains comments this JSON-LD file is not compliant with the JSON standard.
+I.e. the comments must be removed before forwarded to Elasticsearch (e.g. by using JSMin)
+*/
+
+{
+  "settings": {
+    "analysis": {
+      "filter": {
+        /*
+        This token filter extracts strings of numbers (i.e. the ID) out of URLs
+        */
+        "get_id": {
+          "type": "pattern_capture",
+          "preserve_original": 1,
+          "patterns": ["/([0-9]{9})/"]
+        }
+      },
+      "analyzer": {
+        "extr_id": {
+          "type": "custom",
+          "tokenizer": "keyword", // Keeps the string as is
+          "filter": "get_id"
+        },
+        "text_folded": {
+          "type": "custom",
+          "tokenizer": "whitespace",
+          "filter": ["asciifolding"]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "bibliographicResource": {
+      "properties": {
+        "dc:contributor": {
+          "type": "nested",
+          "properties": {
+            "foaf:firstName": { "type": "string" },
+            "foaf:lastName": { "type": "string" },
+            "foaf:name": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}
