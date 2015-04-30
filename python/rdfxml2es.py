@@ -1,7 +1,7 @@
 __author__ = 'Sebastian Schüpbach'
 __copyright__ = 'Copyright 2015, swissbib project, UB Basel'
 __license__ = 'http://opensource.org/licenses/gpl-2.0.php'
-__version__ = '0.1'
+__version__ = '0.2'
 __maintainer__ = 'Sebastian Schüpbach'
 __email__ = 'sebastian.schuepbach@unibas.ch'
 __status__ = 'development'
@@ -18,6 +18,22 @@ from http import client
 class Rdfxml2Es:
 
     def __init__(self, file, ctx, frame, host, port, esindex, indctrl, extcont):
+        """
+        1) Initializes some attributes
+        2) Checks if connection to ES node can be established
+        3) Checks if ES index does not already exist
+        4) If 2) und 3) are true, then create index and type mappings
+
+        :param file: The RDF-XML file
+        :param ctx: File containing the JSON-LD context
+        :param frame: File containing the JSON-LD framing
+        :param host: Host of ES node
+        :param port: Port of ES node
+        :param esindex: Name of ES index
+        :param indctrl: Settings and mapping for ES
+        :param extcont: Should the context in the ES index be embedded or referenced?
+        :return: None
+        """
         self.file = file
         self.ctx = ctx
         self.frame = frame
@@ -46,7 +62,7 @@ class Rdfxml2Es:
         """
         Loads a file containing valid JSON-LD objects and removes comments
         :param ifile:
-        :return Object of type Dictionary:
+        :return: Object of type Dictionary
         """
         with open(ifile, 'r') as f:
             raw = f.read()
@@ -55,12 +71,29 @@ class Rdfxml2Es:
 
     @staticmethod
     def stripchars(string):
+        """
+        Removes tabs and newlines from string.
+        :param string:
+        :return: Cleaned string
+        """
         return ''.join(re.split('\t+|\n+', string))
 
     def parsexml(self):
+        """
+        Parses XML and kicks off the transformation and indexing of the individual documents.
+        Must be implemented in child classes
+        :return: None
+        """
         raise NotImplementedError
 
     def rdf2es(self, string, bibo):
+        """
+        Does the really interesting stuff: Transformation of the
+        triples by subject and indexing in ES
+        :param string: The RDF triples as a concatenated string.
+        :param bibo: Is subject a bibo:Document?
+        :return:
+        """
         g = Graph().parse(data=string)
         jldstr = g.serialize(format='json-ld',
                              indent=4)
@@ -70,7 +103,7 @@ class Rdfxml2Es:
         else:
             test = loads(jldstr.decode('utf-8'))
             esdoc = jsonld.frame(test, self.loadjson(self.frame))['@graph'][0]
-            esdoc['@context'] = self.loadjson(self.ctx)
+            esdoc['@context'] = self.loadjson(self.ctx)['@context']
             doctype = 'bibliographicResource'
         self.of.index(index=self.index, doc_type=doctype, body=esdoc)
 
@@ -129,6 +162,7 @@ class MultiLineXML(Rdfxml2Es):
 
 
 if __name__ == '__main__':
+    # Define a couple of variables
     oneLiner = True
     file = '/home/sebastian/workspace/utilities/examples/xml.rdf'
     jldctx = '/home/sebastian/workspace/utilities/examples/04/context.jsonld'
@@ -138,8 +172,10 @@ if __name__ == '__main__':
     esindex = 'itest37'
     indctrl = '/home/sebastian/workspace/utilities/examples/04/indctrl.json'
     extcont = False
+
     if oneLiner:
         obj = OneLineXML(file, jldctx, jldframe, host, port, esindex, indctrl, extcont)
     else:
         obj = MultiLineXML(file, jldctx, jldframe, host, port, esindex, indctrl, extcont)
+
     obj.parsexml()
