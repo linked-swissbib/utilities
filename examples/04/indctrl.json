@@ -20,7 +20,8 @@ I.e. the comments must be removed before forwarded to Elasticsearch (e.g. by usi
       "analyzer": {
         "extr_id": {
           "type": "custom",
-          "tokenizer": "keyword", // Keeps the string as is
+          "tokenizer": "keyword",
+          // Keeps the string as is
           "filter": "get_id"
         },
         "text_folded": {
@@ -33,14 +34,244 @@ I.e. the comments must be removed before forwarded to Elasticsearch (e.g. by usi
   },
   "mappings": {
     "bibliographicResource": {
+      "dynamic": "strict",
       "properties": {
-        "dc:contributor": {
-          "type": "nested",
+        "@context": {
           "properties": {
-            "foaf:firstName": { "type": "string" },
-            "foaf:lastName": { "type": "string" },
-            "foaf:name": { "type": "string" }
-          }
+            "bibo": {
+              "index": "no",
+              "type": "string"
+            },
+            "dbp": {
+              "index": "no",
+              "type": "string"
+            },
+            "dc": {
+              "index": "no",
+              "type": "string"
+            },
+            "dct": {
+              "index": "no",
+              "type": "string"
+            },
+            "foaf": {
+              "index": "no",
+              "type": "string"
+            },
+            "rdau": {
+              "index": "no",
+              "type": "string"
+            },
+            "rdf": {
+              "index": "no",
+              "type": "string"
+            },
+            "rdfs": {
+              "index": "no",
+              "type": "string"
+            },
+            "skos": {
+              "index": "no",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "@id": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "@type": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "bibo:edition": {
+          "index": "analyzed",
+          "type": "string"
+        },
+        "bibo:isbn10": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "bibo:isbn13": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "bibo:issn": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "dbp:originalLanguage": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "dc:contributor": {
+          "properties": {
+            "@id": {
+              "index": "no",
+              "type": "string"
+            },
+            "@type": {
+              "index": "no",
+              "type": "string"
+            },
+            "dbp:birthYear": {
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "dbp:deathYear": {
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "foaf:firstName": {
+              "index": "analyzed",
+              "type": "string"
+            },
+            "foaf:lastName": {
+              "index": "analyzed",
+              "type": "string"
+            },
+            "foaf:name": {
+              "index": "analyzed",
+              "type": "string"
+            },
+            "rdfs:label": {
+              "index": "analyzed",
+              "type": "string"
+            },
+            "skos:note": {
+              "index": "analyzed",
+              "type": "string"
+            }
+          },
+          "type": "nested"
+        },
+        "dc:format": {
+          "index": "analyzed",
+          "type": "string"
+        },
+        "dct:alternative": {
+          "fields": {
+            "folded": {
+              "analyzer": "text_folded",
+              "type": "string"
+            }
+          },
+          "index": "analyzed",
+          "type": "string"
+        },
+        "dct:bibliographicCitation": {
+          "analyzer": "standard",
+          "index": "analyzed",
+          "type": "string"
+        },
+        "dct:hasPart": {
+          "index": "analyzed",
+          "type": "string"
+        },
+        "dct:isPartOf": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "dct:issued": {
+          "index": "analyzed",
+          "type": "string"
+        },
+        "dct:language": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "dct:subject": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "dct:title": {
+          "fields": {
+            "folded": {
+              "analyzer": "text_folded",
+              "type": "string"
+            }
+          },
+          "index": "analyzed",
+          "type": "string"
+        },
+        "rdau:contentType": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "rdau:dissertationOrThesisInformation": {
+          "index": "analyzed",
+          "type": "string"
+        },
+        "rdau:mediaType": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "rdau:modeOfIssuance": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "rdau:noteOnResource": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "rdau:placeOfPublication": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "rdau:publicationStatement": {
+          "index": "analyzed",
+          "type": "string"
+        },
+        "rdfs:isDefinedBy": {
+          "properties": {
+            "@id": {
+              "analyzer": "extr_id",
+              "index": "analyzed",
+              "type": "string"
+            }
+          },
+          "type": "object"
         }
       }
     }
