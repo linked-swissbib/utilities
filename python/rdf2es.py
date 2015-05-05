@@ -176,7 +176,8 @@ class JsonLD2ES(Rdf2JsonLD):
         Indexes JSON-LD objects in Elasticsearch
         :param doc JSON-LD document body:
         """
-        self.of.index(index=self.index, doc_type=self.type, body=doc)
+        docid = re.findall('\w{9}', doc['@id'])[0]
+        self.of.index(index=self.index, doc_type=self.type, id=docid, body=doc)
 
 
 class JsonLD2File(Rdf2JsonLD):
