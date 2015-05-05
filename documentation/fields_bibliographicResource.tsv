@@ -1,7 +1,7 @@
 "Name"	"Parent"	"IRI"	"Type"	"Index"	"Analyzer"
 "@id"		"yes"	"string"	"not_analyzed"	
 "@id"	"dc:contributor"	"no"	"string"	"no"	
-"@type"		"yes"	"string"	"not_analyzed"	
+"@type"		"yes"	"string"	"no"	
 "@type"	"dc:contributor"	"no"	"string"	"no"	
 "bibo"	"@context"	"yes"	"string"	"no"	
 "bibo:edition"		"no"	"string"	"analyzed"	"standard"
@@ -41,3 +41,4 @@
 "rdfs:label"	"dc:contributor"	"no"	"string"	"analyzed"	"standard"
 "skos"	"@context"	"yes"	"string"	"no"	
 "skos:note"	"dc:contributor"	"no"	"string"	"analyzed"	"standard"
+"xsl"	"@context"	"yes"	"string"	"no"	
