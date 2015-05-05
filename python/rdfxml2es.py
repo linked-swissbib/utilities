@@ -105,7 +105,8 @@ class Rdfxml2Es:
             esdoc = jsonld.frame(test, self.loadjson(self.frame))['@graph'][0]
             esdoc['@context'] = self.loadjson(self.ctx)['@context']
             doctype = 'bibliographicResource'
-        self.of.index(index=self.index, doc_type=doctype, body=esdoc)
+        docid = re.findall('\w{9}', esdoc['@id'])[0]
+        self.of.index(index=self.index, doc_type=doctype, id=docid, body=esdoc)
 
 
 class OneLineXML(Rdfxml2Es):
@@ -169,7 +170,7 @@ if __name__ == '__main__':
     jldframe = '/home/sebastian/workspace/utilities/examples/04/frame.jsonld'
     host = 'localhost'
     port = 9200
-    esindex = 'itest37'
+    esindex = 'testsb'
     indctrl = '/home/sebastian/workspace/utilities/examples/04/indctrl.json'
     extcont = False
 
