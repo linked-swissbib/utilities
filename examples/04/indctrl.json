@@ -15,6 +15,11 @@ I.e. the comments must be removed before forwarded to Elasticsearch (e.g. by usi
           "type": "pattern_capture",
           "preserve_original": 1,
           "patterns": ["/([0-9]{9})/"]
+        },
+        "autocomplete_filter": {
+          "type": "edge_ngram",
+          "min_gram": 1,
+          "max_gram": 8
         }
       },
       "analyzer": {
@@ -28,6 +33,14 @@ I.e. the comments must be removed before forwarded to Elasticsearch (e.g. by usi
           "type": "custom",
           "tokenizer": "whitespace",
           "filter": ["asciifolding"]
+        },
+        "autocomplete": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "filter": [
+            "lowercase",
+            "autocomplete_filter"
+          ]
         }
       }
     }
@@ -73,6 +86,10 @@ I.e. the comments must be removed before forwarded to Elasticsearch (e.g. by usi
             "skos": {
               "index": "no",
               "type": "string"
+            },
+            "xsl": {
+              "index": "no",
+              "type": "string"
             }
           },
           "type": "object"
@@ -82,7 +99,7 @@ I.e. the comments must be removed before forwarded to Elasticsearch (e.g. by usi
           "type": "string"
         },
         "@type": {
-          "index": "not_analyzed",
+          "index": "no",
           "type": "string"
         },
         "bibo:edition": {
@@ -268,6 +285,100 @@ I.e. the comments must be removed before forwarded to Elasticsearch (e.g. by usi
             "@id": {
               "analyzer": "extr_id",
               "index": "analyzed",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      }
+    },
+    "document": {
+      "dynamic": "strict",
+      "properties": {
+        "@context": {
+          "properties": {
+            "bibo": {
+              "index": "no",
+              "type": "string"
+            },
+            "dbp": {
+              "index": "no",
+              "type": "string"
+            },
+            "dc": {
+              "index": "no",
+              "type": "string"
+            },
+            "dct": {
+              "index": "no",
+              "type": "string"
+            },
+            "foaf": {
+              "index": "no",
+              "type": "string"
+            },
+            "rdau": {
+              "index": "no",
+              "type": "string"
+            },
+            "rdf": {
+              "index": "no",
+              "type": "string"
+            },
+            "rdfs": {
+              "index": "no",
+              "type": "string"
+            },
+            "skos": {
+              "index": "no",
+              "type": "string"
+            },
+            "xsl": {
+              "index": "no",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "@id": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "@type": {
+          "index": "no",
+          "type": "string"
+        },
+        "dc:contributor": {
+          "analyzer": "autocomplete",
+          "index": "analyzed",
+          "type": "string"
+        },
+        "dct:issued": {
+          "properties": {
+            "@type": {"type": "string"},
+            "@value": {
+              "format": "dateOptionalTime",
+              "type": "date"
+            }
+          },
+          "type": "object"
+        },
+        "dct:modified": {
+          "properties": {
+            "@type": {
+              "type": "string"
+            },
+            "@value": {
+              "format": "dateOptionalTime",
+              "type": "date"
+            }
+          },
+          "type": "object"
+        },
+        "foaf:primaryTopic": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
               "type": "string"
             }
           },
