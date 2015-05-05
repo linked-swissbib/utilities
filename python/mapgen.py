@@ -11,23 +11,27 @@ from pprint import pprint
 import argparse
 
 
-def mapping(estype, ofile):
+def gencontext(mapobj):
+    context = dsl.Object()
+    namespaces = ['bibo', 'dbp', 'dc', 'dct', 'foaf', 'rdau', 'rdf', 'rdfs', 'skos', 'xsl']
+    for token in namespaces:
+        context = context.property(token, 'string', index='no')
+    return mapobj.field('@context', context)
+
+
+def genbibres(stream, estype='bibliographicResource'):
     """
-    Creates the mapping for Elasticsearch
-    :param estype: Name of ES type
+    Creates the mapping for type bibliographicResource in Elasticsearch
+    :param estype: Name of ES type (defaults to 'bibliographicResource')
     :param ofile: Name of file where the mapping will be stored
     """
     m = dsl.Mapping(estype)
     # Set properties
     m.properties.dynamic = 'strict'
     # Adding mapping
-    context = dsl.Object()
-    namespaces = ['bibo', 'dbp', 'dc', 'dct', 'foaf', 'rdau', 'rdf', 'rdfs', 'skos']
-    for token in namespaces:
-        context = context.property(token, 'string', index='no')
-    m = m.field('@context', context)
+    m = gencontext(m)
     m = m.field('@id', 'string', index='not_analyzed')
-    m = m.field('@type', 'string', index='not_analyzed')
+    m = m.field('@type', 'string', index='no')
     m = m.field('bibo:edition', 'string', index='analyzed')
     m = m.field('bibo:isbn10', 'string', index='not_analyzed')
     m = m.field('bibo:isbn13', 'string', index='not_analyzed')
@@ -62,16 +66,41 @@ def mapping(estype, ofile):
     m = m.field('rdau:publicationStatement', 'string', index='analyzed')
     m = m.field('rdfs:isDefinedBy', dsl.Object().property('@id', 'string', index='analyzed', analyzer='extr_id'))
     # Save the mapping in ES
-    of = open(ofile, mode='w')
-    pprint(m.to_dict(), stream=of)
-    of.close()
+    pprint(m.to_dict(), stream=stream)
     # m.save(esindex, using=escon)
+
+
+def gendocu(stream, estype='document'):
+    """
+    Creates the mapping for type document in Elasticsearch
+    :param estype: Name of ES type (defaults to 'document')
+    :param ofile: Name of file where the mapping will be stored
+    """
+    m = dsl.Mapping(estype)
+    # Set properties
+    m.properties.dynamic = 'strict'
+    # Adding mapping
+    m = gencontext(m)
+    m = m.field('@id', 'string', index='not_analyzed')
+    m = m.field('@type', 'string', index='no')
+    m = m.field('dc:contributor', 'string', index='analyzed', analyzer='autocomplete')
+    access = dsl.Object()
+    access = access.property('@type', 'string')
+    access = access.property('@value', 'date', format='dateOptionalTime')
+    m = m.field('dct:issued', access)
+    m = m.field('dct:modified', access)
+    m = m.field('foaf:primaryTopic', dsl.Object().property('@id', 'string', index='not_analyzed'))
+    # Save the mapping in ES
+    pprint(m.to_dict(), stream=stream)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Creates the mapping for Elasticsearch")
-    parser.add_argument('type', metavar='<name>', type=str, help='Name of ES type')
+    # parser.add_argument('type', metavar='<name>', type=str, help='Name of ES type')
     parser.add_argument('outputfile', metavar='<file>', type=str, help='Output file')
     args = parser.parse_args()
 
-    mapping(args.type, args.outputfile)
+    of = open(args.outputfile, mode='w')
+    genbibres(of)
+    gendocu(of)
+    of.close()
