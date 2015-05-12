@@ -13,11 +13,12 @@ from jsmin import jsmin
 from json import loads
 from elasticsearch import Elasticsearch, helpers
 from http import client
+import argparse
 
 
 class Rdfxml2Es:
 
-    def __init__(self, file, ctx, frame, host, port, esindex, indctrl, extcont, bulkmax):
+    def __init__(self, file, frame, host, port, esindex, indctrl, extcont, bulksize, devmode):
         """
         1) Initializes some attributes
         2) Checks if connection to ES node can be established
@@ -25,26 +26,28 @@ class Rdfxml2Es:
         4) If 2) und 3) are true, then create index and type mappings
 
         :param file: The RDF-XML file
-        :param ctx: File containing the JSON-LD context
         :param frame: File containing the JSON-LD framing
         :param host: Host of ES node
         :param port: Port of ES node
         :param esindex: Name of ES index
         :param indctrl: Settings and mapping for ES
         :param extcont: Should the context in the ES index be embedded or referenced?
+        :param bulksize: Size of bulk uploads
         :return: None
         """
         self.file = file
-        self.ctx = ctx
         self.frame = frame
         self.host = host
         self.port = port
         self.index = esindex
         self.indctrl = indctrl
         self.extcont = extcont
-        self.bulkmax = bulkmax
+        self.bulksize = bulksize
         self.bulknum = 0
+        self.devmode = devmode
         self.esdocs = list()
+        if self.devmode > 0:
+            self.doccounter = 0
         try:
             h1 = client.HTTPConnection(self.host, self.port)
             h1.connect()
@@ -101,12 +104,12 @@ class Rdfxml2Es:
         jldstr = g.serialize(format='json-ld',
                              indent=4)
         if bibo:
-            esdoc = jsonld.compact(loads(jldstr.decode('utf-8')), self.loadjson(self.ctx))
+            esdoc = jsonld.compact(loads(jldstr.decode('utf-8')), self.loadjson(self.frame))
             doctype = 'document'
         else:
             esdoc = loads(jldstr.decode('utf-8'))
             esdoc = jsonld.frame(esdoc, self.loadjson(self.frame))['@graph'][0]
-            esdoc['@context'] = self.loadjson(self.ctx)['@context']
+            esdoc['@context'] = self.loadjson(self.frame)['@context']
             doctype = 'bibliographicResource'
         docid = re.findall('\w{9}', esdoc['@id'])[0]
         esdoc.update({'_index': self.index, '_type': doctype, '_id': docid})
@@ -115,7 +118,7 @@ class Rdfxml2Es:
     def bulkupload(self, string, bibo):
         self.bulknum += 1
         self.esdocs.append(self.rdf2es(string, bibo))
-        if self.bulknum >= self.bulkmax:
+        if self.bulknum >= self.bulksize:
             # Perform bulk upload
             helpers.bulk(client=self.of, actions=self.esdocs, stats_only=True)
             # Reset counter and list
@@ -134,6 +137,12 @@ class OneLineXML(Rdfxml2Es):
             header = str()
             footer = '</rdf:RDF>'
             for line in rdfxml:
+                if self.devmode > 0:
+                    if self.doccounter % 100 == 0:
+                        print(self.doccounter, 'documents processed')
+                    self.doccounter += 1
+                    if self.doccounter > self.devmode + 2:
+                        break
                 if xmlstart.search(line):
                     header = self.stripchars(line)
                 elif rdfstart.search(line):
@@ -143,6 +152,9 @@ class OneLineXML(Rdfxml2Es):
                     self.bulkupload(doc, bibo.search(doc))
                 else:
                     continue
+            # Upload last bulk
+            if len(self.esdocs) > 0:
+                helpers.bulk(client=self.of, actions=self.esdocs, stats_only=True)
 
 
 class MultiLineXML(Rdfxml2Es):
@@ -159,6 +171,12 @@ class MultiLineXML(Rdfxml2Es):
             header = str()
             footer = '</rdf:RDF>'
             for line in rdfxml:
+                if self.devmode > 0:
+                    if self.doccounter % 100 == 0:
+                        print(self.doccounter, 'documents processed')
+                    self.doccounter += 1
+                    if self.doccounter > self.devmode + 2:
+                        break
                 if xmlstart.search(line):
                     header = self.stripchars(line)
                 elif rdfstart.search(line):
@@ -174,25 +192,42 @@ class MultiLineXML(Rdfxml2Es):
                     doc += self.stripchars(line)
                 else:
                     continue
+            # Upload last bulk
+            if len(self.esdocs) > 0:
+                helpers.bulk(client=self.of, actions=self.esdocs, stats_only=True)
 
 
 if __name__ == '__main__':
-    # Define a couple of variables
-
-    oneLiner = True
-    file = '/home/sebastian/workspace/utilities/examples/xml.rdf'
-    jldctx = '/home/sebastian/workspace/utilities/examples/04/context.jsonld'
-    jldframe = '/home/sebastian/workspace/utilities/examples/04/frame.jsonld'
-    host = 'localhost'
-    port = 9200
-    esindex = 'demo'
-    indctrl = '/home/sebastian/workspace/utilities/examples/04/indctrl.json'
-    extcont = False
-    bulkmax=10000
-
-    if oneLiner:
-        obj = OneLineXML(file, jldctx, jldframe, host, port, esindex, indctrl, extcont, bulkmax)
+    parser = argparse.ArgumentParser(description="Indexing RDF/XML triples in Elasticsearch")
+    parser.add_argument('file', metavar='<filename>', type=str, help='Path to RDF/XML file')
+    parser.add_argument('frame', metavar='<filename>', type=str, help='Path to JSON-LD frame file')
+    parser.add_argument('--host', metavar='<ip>', type=str, default='localhost', help='Ip of search engine host')
+    parser.add_argument('--port', metavar='<port>', type=int, default=9200, help='Port number of search engine')
+    parser.add_argument('--index', metavar='<str>', dest='index', type=str, default='testsb',
+                        help='Name of Elasticsearch index. Defaults to \'testsb\'')
+    parser.add_argument('--extcont', metavar='<boolean>', dest='extcont', type=bool,
+                        choices=['True', 'False'], default=False, help='Embed context as link. Defaults to False')
+    parser.add_argument('--indctrl', metavar='<filename>', dest='indctrl', type=str,
+                        help='File containing settings and mappings for Elasticsearch indexing.')
+    parser.add_argument('--bulksize', metavar='<filename>', dest='bulksize', type=int, default=1000,
+                        help='Size of bulk uploads.')
+    parser.add_argument('--oneline', metavar='<boolean>', dest='oneline', type=bool,
+                        choices=['True', 'False'], default=True,
+                        help='Are RDF/XML-documents in input file on one or multiple lines? Defaults to False')
+    parser.add_argument('--devmode', metavar='<int>', dest='devmode', type=int, default=0,
+                        help='Count the time for a specified amount of samples. Defaults to 0')
+    args = parser.parse_args()
+    if args.oneline:
+        obj = OneLineXML(args.file, args.frame, args.host, args.port, args.index,
+                         args.indctrl, args.extcont, args.bulksize, args.devmode)
     else:
-        obj = MultiLineXML(file, jldctx, jldframe, host, port, esindex, indctrl, extcont, bulkmax)
-
-    obj.parsexml()
+        obj = MultiLineXML(args.file, args.frame, args.host, args.port, args.index,
+                           args.indctrl, args.extcont, args.bulksize, args.devmode)
+    if args.devmode > 0:
+        from time import time
+        start_time = time()
+        obj.parsexml()
+        print('Elapsed time for', args.devmode, 'elements @', args.bulksize, 'docs per bulk upload:',
+              "{0:.2f}".format(round((time() - start_time),2)), 'seconds')
+    else:
+        obj.parsexml()
