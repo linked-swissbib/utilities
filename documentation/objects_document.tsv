@@ -14,4 +14,4 @@
 "rdf"	"@context"	"yes"	"string"	"no"	
 "rdfs"	"@context"	"yes"	"string"	"no"	
 "skos"	"@context"	"yes"	"string"	"no"	
-"xsl"	"@context"	"yes"	"string"	"no"	
+"xsd"	"@context"	"yes"	"string"	"no"	

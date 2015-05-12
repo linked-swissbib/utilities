@@ -41,4 +41,4 @@
 "rdfs:label"	"dc:contributor"	"no"	"string"	"analyzed"	"standard"
 "skos"	"@context"	"yes"	"string"	"no"	
 "skos:note"	"dc:contributor"	"no"	"string"	"analyzed"	"standard"
-"xsl"	"@context"	"yes"	"string"	"no"	
+"xsd"	"@context"	"yes"	"string"	"no"

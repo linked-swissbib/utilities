@@ -1,0 +1,44 @@
+digraph rdfxml2es {
+
+nodesep=.05;
+// rankdir=LR;
+
+rdfxml [label="RDF-XML file", shape=box, style=filled, fillcolor=cyan2];
+howManyLines [label="Subject element on one line?", shape=diamond];
+oneLineAlgo [label="oneLine splitting algorithm", shape=ellipse];
+multiLineAlgo [label="multiLine splitting algorithm", shape=ellipse];
+subjElem [label="Extracted subject element", shape=box];
+otherElem1 [label="Other elements", shape=box, color=grey, fontcolor=grey];
+otherElem2 [label="Other elements", shape=box, color=grey, fontcolor=grey];
+jsonLDTrans [label="Transformation into JSON-LD", shape=ellipse];
+whatType [label="Type of document?", shape=diamond];
+compactDoc [label="JSON-LD compact algorithm", shape=ellipse];
+compactRes [label="JSON-LD compact algorithm", shape=ellipse];
+frameRes [label="JSON-LD framing algorithm", shape=ellipse];
+indexDoc [label="ES indexing", shape=ellipse];
+indexRes [label="ES indexing", shape=ellipse];
+// context [label="context.jsonld", shape=note];
+// frame [label="frame.jsonld (provides context and frame)", shape=note];
+// indctrl [label="indctrl.json (settings and mappings)", shape=note];
+typeRes [label="ES document of type document", shape=box, style=filled, fillcolor=cyan2];
+typeDoc [label="ES document of type bibliographicResource", shape=box, style=filled, fillcolor=cyan2];
+
+rdfxml -> howManyLines;
+howManyLines -> oneLineAlgo [label="1 line"];
+howManyLines -> multiLineAlgo [label=">1 lines"];
+oneLineAlgo -> subjElem;
+oneLineAlgo -> otherElem1
+multiLineAlgo -> subjElem;
+multiLineAlgo -> otherElem2;
+subjElem -> jsonLDTrans -> whatType;
+whatType -> compactDoc [label="document"];
+whatType -> compactRes [label="bibliographicResource"];
+compactRes -> frameRes -> indexRes -> typeRes;
+compactDoc -> indexDoc -> typeDoc;
+// context -> compactDoc;
+// context -> compactRes;
+// frame -> frameRes;
+// indctrl -> indexDoc;
+// indctrl -> indexRes
+
+}

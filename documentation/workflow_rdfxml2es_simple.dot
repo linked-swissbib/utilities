@@ -1,0 +1,22 @@
+digraph rdfxml2es {
+
+nodesep=.05;
+rankdir=LR;
+
+rdfxml [label="RDF-XML\nfile", shape=box, style=filled, fillcolor=cyan2];
+splitting [label="Splitting\nalgorithm", shape=ellipse];
+subjElem [label="Extracted\nsubject\nelement", shape=box];
+otherElem [label="Other\nelements", shape=box, color=grey, fontcolor=grey];
+jsonLDTrans [label="Trans-\nformation\ninto\nJSON-LD", shape=ellipse];
+jsonLDDoc [label="JSON-LD\ndocument", shape=box];
+indexing [label="ES\nindexing", shape=ellipse];
+esIndex [label="ES\nindex", shape=box, style=filled, fillcolor=cyan2];
+
+rdfxml -> splitting;
+splitting -> subjElem;
+splitting -> otherElem;
+subjElem -> jsonLDTrans -> jsonLDDoc;
+jsonLDDoc -> jsonLDDoc;
+jsonLDDoc -> indexing -> esIndex;
+
+}
