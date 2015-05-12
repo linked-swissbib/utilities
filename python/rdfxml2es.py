@@ -11,13 +11,13 @@ from rdflib import Graph
 from pyld import jsonld
 from jsmin import jsmin
 from json import loads
-from elasticsearch import Elasticsearch
+from elasticsearch import Elasticsearch, helpers
 from http import client
 
 
 class Rdfxml2Es:
 
-    def __init__(self, file, ctx, frame, host, port, esindex, indctrl, extcont):
+    def __init__(self, file, ctx, frame, host, port, esindex, indctrl, extcont, bulkmax):
         """
         1) Initializes some attributes
         2) Checks if connection to ES node can be established
@@ -42,6 +42,9 @@ class Rdfxml2Es:
         self.index = esindex
         self.indctrl = indctrl
         self.extcont = extcont
+        self.bulkmax = bulkmax
+        self.bulknum = 0
+        self.esdocs = list()
         try:
             h1 = client.HTTPConnection(self.host, self.port)
             h1.connect()
@@ -101,12 +104,23 @@ class Rdfxml2Es:
             esdoc = jsonld.compact(loads(jldstr.decode('utf-8')), self.loadjson(self.ctx))
             doctype = 'document'
         else:
-            test = loads(jldstr.decode('utf-8'))
-            esdoc = jsonld.frame(test, self.loadjson(self.frame))['@graph'][0]
+            esdoc = loads(jldstr.decode('utf-8'))
+            esdoc = jsonld.frame(esdoc, self.loadjson(self.frame))['@graph'][0]
             esdoc['@context'] = self.loadjson(self.ctx)['@context']
             doctype = 'bibliographicResource'
         docid = re.findall('\w{9}', esdoc['@id'])[0]
-        self.of.index(index=self.index, doc_type=doctype, id=docid, body=esdoc)
+        esdoc.update({'_index': self.index, '_type': doctype, '_id': docid})
+        return esdoc
+
+    def bulkupload(self, string, bibo):
+        self.bulknum += 1
+        self.esdocs.append(self.rdf2es(string, bibo))
+        if self.bulknum >= self.bulkmax:
+            # Perform bulk upload
+            helpers.bulk(client=self.of, actions=self.esdocs, stats_only=True)
+            # Reset counter and list
+            self.bulknum = 0
+            del self.esdocs[:]
 
 
 class OneLineXML(Rdfxml2Es):
@@ -126,7 +140,7 @@ class OneLineXML(Rdfxml2Es):
                     header += self.stripchars(line)
                 elif docstart.search(line):
                     doc = header + self.stripchars(line) + footer
-                    self.rdf2es(doc, bibo.search(doc))
+                    self.bulkupload(doc, bibo.search(doc))
                 else:
                     continue
 
@@ -154,7 +168,7 @@ class MultiLineXML(Rdfxml2Es):
                     doc = header + self.stripchars(line)
                 elif docend.search(line):
                     doc += self.stripchars(line) + footer
-                    self.rdf2es(doc, bibo.search(doc))
+                    self.bulkupload(doc, bibo.search(doc))
                     reclines = False
                 elif reclines:
                     doc += self.stripchars(line)
@@ -164,19 +178,21 @@ class MultiLineXML(Rdfxml2Es):
 
 if __name__ == '__main__':
     # Define a couple of variables
+
     oneLiner = True
     file = '/home/sebastian/workspace/utilities/examples/xml.rdf'
     jldctx = '/home/sebastian/workspace/utilities/examples/04/context.jsonld'
     jldframe = '/home/sebastian/workspace/utilities/examples/04/frame.jsonld'
     host = 'localhost'
     port = 9200
-    esindex = 'testsb'
+    esindex = 'demo'
     indctrl = '/home/sebastian/workspace/utilities/examples/04/indctrl.json'
     extcont = False
+    bulkmax=10000
 
     if oneLiner:
-        obj = OneLineXML(file, jldctx, jldframe, host, port, esindex, indctrl, extcont)
+        obj = OneLineXML(file, jldctx, jldframe, host, port, esindex, indctrl, extcont, bulkmax)
     else:
-        obj = MultiLineXML(file, jldctx, jldframe, host, port, esindex, indctrl, extcont)
+        obj = MultiLineXML(file, jldctx, jldframe, host, port, esindex, indctrl, extcont, bulkmax)
 
     obj.parsexml()
