@@ -8,10 +8,10 @@ I.e. the comments must be removed before forwarded to Elasticsearch (e.g. by usi
   "settings": {
     "analysis": {
       "filter": {
-        /*
-        This token filter extracts strings of numbers (i.e. the ID) out of URLs
-        */
         "get_id": {
+          /*
+          Extracts strings of numbers (i.e. the ID) out of URLs
+          */
           "type": "pattern_capture",
           "preserve_original": 1,
           "patterns": ["/([0-9]{9})/"]
@@ -24,19 +24,30 @@ I.e. the comments must be removed before forwarded to Elasticsearch (e.g. by usi
       },
       "analyzer": {
         "extr_id": {
+          /*
+          Provides a token filter to extracts numbers out of URIs
+          */
           "type": "custom",
           "tokenizer": "keyword",
           // Keeps the string as is
           "filter": "get_id"
         },
         "text_folded": {
+          /*
+          Converts Unicode characters outside the ASCII range
+          into their ASCII equivalent, if one exists.
+          */
           "type": "custom",
           "tokenizer": "whitespace",
           "filter": ["asciifolding"]
         },
         "autocomplete": {
+          /*
+          Provides an EdgeNGram-filter to enable an autocomplete
+          option for querying.
+          */
           "type": "custom",
-          "tokenizer": "standard",
+          "tokenizer": "keyword",
           "filter": [
             "lowercase",
             "autocomplete_filter"
@@ -87,7 +98,7 @@ I.e. the comments must be removed before forwarded to Elasticsearch (e.g. by usi
               "index": "no",
               "type": "string"
             },
-            "xsl": {
+            "xsd": {
               "index": "no",
               "type": "string"
             }
@@ -333,7 +344,7 @@ I.e. the comments must be removed before forwarded to Elasticsearch (e.g. by usi
               "index": "no",
               "type": "string"
             },
-            "xsl": {
+            "xsd": {
               "index": "no",
               "type": "string"
             }
