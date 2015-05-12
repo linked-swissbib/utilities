@@ -13,7 +13,7 @@ import argparse
 
 def gencontext(mapobj):
     context = dsl.Object()
-    namespaces = ['bibo', 'dbp', 'dc', 'dct', 'foaf', 'rdau', 'rdf', 'rdfs', 'skos', 'xsl']
+    namespaces = ['bibo', 'dbp', 'dc', 'dct', 'foaf', 'rdau', 'rdf', 'rdfs', 'skos', 'xsd']
     for token in namespaces:
         context = context.property(token, 'string', index='no')
     return mapobj.field('@context', context)
