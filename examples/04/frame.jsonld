@@ -9,5 +9,6 @@
   "dc": "http://purl.org/dc/elements/1.1/",
   "skos": "http://www.w3.org/2004/02/skos/core#"
 },
-  "@type": "dct:BibliographicResource"
+  "@type": "dct:BibliographicResource",
+  "dc:contributor": {"@type": "foaf:Person"}
 }
