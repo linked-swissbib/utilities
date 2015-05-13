@@ -23,7 +23,6 @@ def genbibres(stream, estype='bibliographicResource'):
     """
     Creates the mapping for type bibliographicResource in Elasticsearch
     :param estype: Name of ES type (defaults to 'bibliographicResource')
-    :param ofile: Name of file where the mapping will be stored
     """
     m = dsl.Mapping(estype)
     # Set properties
@@ -74,7 +73,6 @@ def gendocu(stream, estype='document'):
     """
     Creates the mapping for type document in Elasticsearch
     :param estype: Name of ES type (defaults to 'document')
-    :param ofile: Name of file where the mapping will be stored
     """
     m = dsl.Mapping(estype)
     # Set properties

@@ -18,7 +18,7 @@ import argparse
 
 class Rdfxml2Es:
 
-    def __init__(self, file, frame, host, port, esindex, indctrl, extcont, bulksize, devmode):
+    def __init__(self, file, frame, host, port, esindex, indctrl, bulksize, devmode):
         """
         1) Initializes some attributes
         2) Checks if connection to ES node can be established
@@ -31,8 +31,9 @@ class Rdfxml2Es:
         :param port: Port of ES node
         :param esindex: Name of ES index
         :param indctrl: Settings and mapping for ES
-        :param extcont: Should the context in the ES index be embedded or referenced?
         :param bulksize: Size of bulk uploads
+        :param devmode: Number of samples for performing performance
+        test on different bulk upload sizes
         :return: None
         """
         self.file = file
@@ -41,7 +42,6 @@ class Rdfxml2Es:
         self.port = port
         self.index = esindex
         self.indctrl = indctrl
-        self.extcont = extcont
         self.bulksize = bulksize
         self.bulknum = 0
         self.devmode = devmode
@@ -98,7 +98,7 @@ class Rdfxml2Es:
         triples by subject and indexing in ES
         :param string: The RDF triples as a concatenated string.
         :param bibo: Is subject a bibo:Document?
-        :return:
+        :return: Body for ES indexing
         """
         g = Graph().parse(data=string)
         jldstr = g.serialize(format='json-ld',
@@ -116,6 +116,12 @@ class Rdfxml2Es:
         return esdoc
 
     def bulkupload(self, string, bibo):
+        """
+        Creates a list of single JSON-LD documents and indexes them as bulk upload
+        :param string: The RDF triples as a concatenated string.
+        :param bibo: Is subject a bibo:Document?
+        :return:
+        """
         self.bulknum += 1
         self.esdocs.append(self.rdf2es(string, bibo))
         if self.bulknum >= self.bulksize:
@@ -138,8 +144,6 @@ class OneLineXML(Rdfxml2Es):
             footer = '</rdf:RDF>'
             for line in rdfxml:
                 if self.devmode > 0:
-                    if self.doccounter % 100 == 0:
-                        print(self.doccounter, 'documents processed')
                     self.doccounter += 1
                     if self.doccounter > self.devmode + 2:
                         break
@@ -172,8 +176,6 @@ class MultiLineXML(Rdfxml2Es):
             footer = '</rdf:RDF>'
             for line in rdfxml:
                 if self.devmode > 0:
-                    if self.doccounter % 100 == 0:
-                        print(self.doccounter, 'documents processed')
                     self.doccounter += 1
                     if self.doccounter > self.devmode + 2:
                         break
@@ -205,11 +207,9 @@ if __name__ == '__main__':
     parser.add_argument('--port', metavar='<port>', type=int, default=9200, help='Port number of search engine')
     parser.add_argument('--index', metavar='<str>', dest='index', type=str, default='testsb',
                         help='Name of Elasticsearch index. Defaults to \'testsb\'')
-    parser.add_argument('--extcont', metavar='<boolean>', dest='extcont', type=bool,
-                        choices=['True', 'False'], default=False, help='Embed context as link. Defaults to False')
     parser.add_argument('--indctrl', metavar='<filename>', dest='indctrl', type=str,
                         help='File containing settings and mappings for Elasticsearch indexing.')
-    parser.add_argument('--bulksize', metavar='<filename>', dest='bulksize', type=int, default=1000,
+    parser.add_argument('--bulksize', metavar='<int>', dest='bulksize', type=int, default=1000,
                         help='Size of bulk uploads.')
     parser.add_argument('--oneline', metavar='<boolean>', dest='oneline', type=bool,
                         choices=['True', 'False'], default=True,
@@ -217,17 +217,19 @@ if __name__ == '__main__':
     parser.add_argument('--devmode', metavar='<int>', dest='devmode', type=int, default=0,
                         help='Count the time for a specified amount of samples. Defaults to 0')
     args = parser.parse_args()
+    
     if args.oneline:
         obj = OneLineXML(args.file, args.frame, args.host, args.port, args.index,
-                         args.indctrl, args.extcont, args.bulksize, args.devmode)
+                         args.indctrl, args.bulksize, args.devmode)
     else:
         obj = MultiLineXML(args.file, args.frame, args.host, args.port, args.index,
-                           args.indctrl, args.extcont, args.bulksize, args.devmode)
+                           args.indctrl, args.bulksize, args.devmode)
+    # If devmode is enabled, count the elapsed time
     if args.devmode > 0:
         from time import time
         start_time = time()
         obj.parsexml()
         print('Elapsed time for', args.devmode, 'elements @', args.bulksize, 'docs per bulk upload:',
-              "{0:.2f}".format(round((time() - start_time),2)), 'seconds')
+              "{0:.2f}".format(round((time() - start_time), 2)), 'seconds')
     else:
         obj.parsexml()
