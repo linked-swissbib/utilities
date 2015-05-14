@@ -230,8 +230,7 @@ if __name__ == '__main__':
                         help='File containing settings and mappings for Elasticsearch indexing.')
     parser.add_argument('--bulksize', metavar='<int>', dest='bulksize', type=int, default=1000,
                         help='Size of bulk uploads.')
-    parser.add_argument('--oneline', metavar='<boolean>', dest='oneline', type=bool,
-                        choices=[True, False], default=True,
+    parser.add_argument('--oneline',  action='store_true',  dest='oneline',
                         help='Are RDF/XML-documents in input file on one or multiple lines? Defaults to False')
     parser.add_argument('--devmode', metavar='<int>', dest='devmode', type=int, default=0,
                         help='Count the time for a specified amount of samples. Defaults to 0')
