@@ -14,7 +14,9 @@ from json import loads, dump
 from elasticsearch import Elasticsearch, helpers
 from http import client
 import argparse
-
+import os
+from datetime import datetime
+import gzip
 #don't forget to install dependency rdflib-jsonld (serializer plugin for jsonld)
 
 
@@ -51,10 +53,15 @@ class Rdfxml2Es:
         self.filemode = filemode
         self.esdocs = list()
         self.outsubDir = outsubDir
+        self.numberOfFilesInSubDir = 300
+        self.openedFilesInSubDir = 0
+        self.currentSubDir = 1
+        self.writtenDocuments = 0
         if self.devmode > 0:
             self.doccounter = 0
         if self.filemode:
-            self.of = open('output.json', 'w')
+            self._openFile()
+            #self.of = open('output.json', 'w')
         else:
             try:
                 h1 = client.HTTPConnection(self.host, self.port)
@@ -148,10 +155,18 @@ class Rdfxml2Es:
                     #we need this json dump method because the content is stored in a dictionary structure - as far as I understand it
                     #so we can't just write a string
                     dump(inner, self.of)
+                    #dump(bytes(inner,'UTF-8'), self.of)
+                    self.writtenDocuments += 1
+
                     self.of.write('\n')
             #perhaps flush it only in bigger chunks? - later
-            self.of.flush();
+            self.of.flush()
             del self.esdocs[:]
+            if self.writtenDocuments >= self.bulksize:
+                self._closeFile()
+                self.writtenDocuments = 0
+                self._openFile()
+
 
 
         elif self.bulknum >= self.bulksize:
@@ -161,6 +176,35 @@ class Rdfxml2Es:
             self.bulknum = 0
             del self.esdocs[:]
 
+    def _openFile (self):
+
+        subDir = self.outsubDir + os.sep + self.currentSubDir.__str__()
+        if not os.path.isdir (subDir):
+            os.mkdir(subDir)
+        elif self.openedFilesInSubDir >= self.numberOfFilesInSubDir:
+            self.currentSubDir +=  1
+            subDir = self.outsubDir + os.sep + self.currentSubDir.__str__()
+            if not os.path.isdir (subDir):
+                os.mkdir(subDir)
+            self.numberOfFilesInSubDir = 0
+
+        outfile = "es." + datetime.now().strftime("%Y%m%d_%H%M%S") + "_" + datetime.now().microsecond.__str__() + ".json"
+
+        #using compressed method we are getting difficulties with the gzip interface in combination with the dump method of json module
+        #outfile = "es." + datetime.now().strftime("%Y%m%d_%H%M%S") + "_" + datetime.now().microsecond.__str__() + ".json.gz"
+        absoluteFileName = "".join([subDir,os.sep, outfile])
+        self.of = open(absoluteFileName,'w')
+        #self.of = gzip.open(absoluteFileName,'wb')
+
+        self.numberOfFilesInSubDir += 1
+
+    def _closeFile(self):
+        if not self.of is None:
+            self.of.flush()
+            name = self.of.name
+            self.of.close()
+            os.system("gzip " + name)
+        self.of = None
 
 class OneLineXML(Rdfxml2Es):
 
@@ -187,13 +231,13 @@ class OneLineXML(Rdfxml2Es):
                     header += searchedRootTag.group(1)
             # if we are not in the output - file mode upload the bulk to ES
             if not self.filemode and len(self.esdocs) > 0:
-                #if we want to write to ES in outputfile mode we get an error because the client
-                #for the helper module then is of file IO iterator which causes an exception
+                #if we want to write to ES in file-mode we get an error because the client
+                #for the helper module then is of file-IO iterator which causes an exception
                 #if we want both we have to chnge the current implementation
                 helpers.bulk(client=self.of, actions=self.esdocs, stats_only=True)
         if self.filemode and not self.of is None:
             #close output file
-            self.of.close()
+            self._closeFile()
 
 
 class MultiLineXML(Rdfxml2Es):
@@ -234,7 +278,7 @@ class MultiLineXML(Rdfxml2Es):
                 helpers.bulk(client=self.of, actions=self.esdocs, stats_only=True)
         if self.filemode and not self.of is None:
             #close output file
-            self.of.close()
+            self._closeFile()
 
 
 
