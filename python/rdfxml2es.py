@@ -20,7 +20,7 @@ import argparse
 
 class Rdfxml2Es:
 
-    def __init__(self, file, frame, host, port, esindex, indctrl, bulksize, devmode, outfile):
+    def __init__(self, file, frame, host, port, esindex, indctrl, bulksize, devmode, filemode, outsubDir):
         """
         1) Initializes some attributes
         2) Checks if connection to ES node can be established
@@ -48,11 +48,12 @@ class Rdfxml2Es:
         self.bulksize = bulksize
         self.bulknum = 0
         self.devmode = devmode
-        self.outfile = outfile
+        self.filemode = filemode
         self.esdocs = list()
+        self.outsubDir = outsubDir
         if self.devmode > 0:
             self.doccounter = 0
-        if self.outfile:
+        if self.filemode:
             self.of = open('output.json', 'w')
         else:
             try:
@@ -117,7 +118,7 @@ class Rdfxml2Es:
             esdoc['@context'] = self.loadjson(self.frame)['@context']
             doctype = 'bibliographicResource'
         docid = re.findall('\w{9}', esdoc['@id'])[0]
-        if self.outfile:
+        if self.filemode:
             bulkfile = [{'index': {'_index': self.index, '_type': doctype, '_id': docid}}, esdoc]
             return bulkfile
         else:
@@ -131,21 +132,31 @@ class Rdfxml2Es:
         :param bibo: Is subject a bibo:Document?
         :return:
         """
-        self.bulknum += 1
+        if not self.filemode:
+            self.bulknum += 1
         self.esdocs.append(self.rdf2es(string, bibo))
-        if self.bulknum >= self.bulksize:
-            if self.outfile:
-                # Output content to file
-                for outer in self.esdocs:
-                    for inner in outer:
-                        # pp = PrettyPrinter(indent=0, width=100000, stream=self.of, compact=True)
-                        # pp.pprint(inner)
-                        #self.of.write(dumps(inner, separators='\n'))
-                        dump(inner, self.of)
-                        self.of.write('\n')
-            else:
-                # Perform bulk upload
-                helpers.bulk(client=self.of, actions=self.esdocs, stats_only=True)
+
+        if self.filemode:
+            # Output content to file
+            #I think we shouldn't serialize the content in memory in the output-file mode
+
+            for outer in self.esdocs:
+                for inner in outer:
+                    # pp = PrettyPrinter(indent=0, width=100000, stream=self.of, compact=True)
+                    # pp.pprint(inner)
+                    #self.of.write(dumps(inner, separators='\n'))
+                    #we need this json dump method because the content is stored in a dictionary structure - as far as I understand it
+                    #so we can't just write a string
+                    dump(inner, self.of)
+                    self.of.write('\n')
+            #perhaps flush it only in bigger chunks? - later
+            self.of.flush();
+            del self.esdocs[:]
+
+
+        elif self.bulknum >= self.bulksize:
+            # Perform bulk upload
+            helpers.bulk(client=self.of, actions=self.esdocs, stats_only=True)
             # Reset counter and list
             self.bulknum = 0
             del self.esdocs[:]
@@ -157,7 +168,7 @@ class OneLineXML(Rdfxml2Es):
         with open(self.file) as rdfxml:
             docstart = re.compile('<bibo:Document|<dct:BibliographicResource')
             xmlstart = re.compile('<?xml version')
-            rdfstart = re.compile('<rdf:RDF')
+            pRdfstart = re.compile('.*?(<rdf:RDF.*$)')
             bibo = re.compile('<bibo:Document')
             header = str()
             footer = '</rdf:RDF>'
@@ -166,18 +177,23 @@ class OneLineXML(Rdfxml2Es):
                     self.doccounter += 1
                     if self.doccounter > self.devmode + 2:
                         break
-                if xmlstart.search(line):
-                    header = self.stripchars(line)
-                elif rdfstart.search(line):
-                    header += self.stripchars(line)
-                elif docstart.search(line):
+                if docstart.search(line):
                     doc = header + self.stripchars(line) + footer
                     self.bulkupload(doc, bibo.search(doc))
-                else:
-                    continue
-            # Upload last bulk
-            if len(self.esdocs) > 0:
+                    continue #make it a little bit faster
+                searchedRootTag = pRdfstart.search(line)
+                #header is always before document line
+                if (searchedRootTag):
+                    header += searchedRootTag.group(1)
+            # if we are not in the output - file mode upload the bulk to ES
+            if not self.filemode and len(self.esdocs) > 0:
+                #if we want to write to ES in outputfile mode we get an error because the client
+                #for the helper module then is of file IO iterator which causes an exception
+                #if we want both we have to chnge the current implementation
                 helpers.bulk(client=self.of, actions=self.esdocs, stats_only=True)
+        if self.filemode and not self.of is None:
+            #close output file
+            self.of.close()
 
 
 class MultiLineXML(Rdfxml2Es):
@@ -214,8 +230,14 @@ class MultiLineXML(Rdfxml2Es):
                 else:
                     continue
             # Upload last bulk
-            if len(self.esdocs) > 0:
+            if not self.filemode and len(self.esdocs) > 0:
                 helpers.bulk(client=self.of, actions=self.esdocs, stats_only=True)
+        if self.filemode and not self.of is None:
+            #close output file
+            self.of.close()
+
+
+
 
 
 if __name__ == '__main__':
@@ -234,15 +256,16 @@ if __name__ == '__main__':
                         help='Are RDF/XML-documents in input file on one or multiple lines? Defaults to False')
     parser.add_argument('--devmode', metavar='<int>', dest='devmode', type=int, default=0,
                         help='Count the time for a specified amount of samples. Defaults to 0')
-    parser.add_argument('--outfile', action='store_true', help='File output. Defaults to False')
+    parser.add_argument('--filemode', action='store_true', dest='filemode', help='Do we want to write content in files using the ES _bulk API?. Defaults to False')
+    parser.add_argument('--outsubDir', type=str, dest='outsubDir', help='base directory for subdirs where we want to store the Json content in filemode - defaults to /tmp', default='/tmp')
     args = parser.parse_args()
     
     if args.oneline:
         obj = OneLineXML(args.file, args.frame, args.host, args.port, args.index,
-                         args.indctrl, args.bulksize, args.devmode, args.outfile)
+                         args.indctrl, args.bulksize, args.devmode, args.filemode, args.outsubDir)
     else:
         obj = MultiLineXML(args.file, args.frame, args.host, args.port, args.index,
-                           args.indctrl, args.bulksize, args.devmode, args.outfile)
+                           args.indctrl, args.bulksize, args.devmode, args.filemode, args.outsubDir)
     # If devmode is enabled, count the elapsed time
     if args.devmode > 0:
         from time import time
@@ -252,3 +275,4 @@ if __name__ == '__main__':
               "{0:.2f}".format(round((time() - start_time), 2)), 'seconds')
     else:
         obj.parsexml()
+
