@@ -15,6 +15,8 @@ from elasticsearch import Elasticsearch, helpers
 from http import client
 import argparse
 
+#don't forget to install dependency rdflib-jsonld (serializer plugin for jsonld)
+
 
 class Rdfxml2Es:
 
@@ -58,15 +60,13 @@ class Rdfxml2Es:
                 h1.connect()
                 h1.close()
                 self.of = Elasticsearch([{'host': self.host, 'port': self.port}])
-                if self.of.indices.exists(self.index):
-                    raise Exception('Error', 'Elasticsearch index already exists.')
+                if  not self.of.indices.exists(self.index) is True:
+                    if self.indctrl is not None:
+                        self.of.indices.create(index=self.index, body=self.loadjson(self.indctrl))
+                    else:
+                        self.of.indices.create(index=self.index)
             except Exception as inst:
                 exit("Error: " + inst.args[1])
-            else:
-                if self.indctrl is not None:
-                    self.of.indices.create(index=self.index, body=self.loadjson(self.indctrl))
-                else:
-                    self.of.indices.create(index=self.index)
 
     @staticmethod
     def loadjson(ifile):
@@ -234,8 +234,7 @@ if __name__ == '__main__':
                         help='Are RDF/XML-documents in input file on one or multiple lines? Defaults to False')
     parser.add_argument('--devmode', metavar='<int>', dest='devmode', type=int, default=0,
                         help='Count the time for a specified amount of samples. Defaults to 0')
-    parser.add_argument('--outfile', metavar='<boolean>', dest='outfile', type=bool, choices=[True, False],
-                        default=False, help='File output. Defaults to False')
+    parser.add_argument('--outfile', action='store_true', help='File output. Defaults to False')
     args = parser.parse_args()
     
     if args.oneline:
