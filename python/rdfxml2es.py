@@ -200,6 +200,8 @@ class Rdfxml2Es:
 
     def _closeFile(self):
         if not self.of is None:
+            #last return necessary for bulk API
+            self.of.write("\n")
             self.of.flush()
             name = self.of.name
             self.of.close()

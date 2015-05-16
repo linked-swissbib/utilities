@@ -45,16 +45,15 @@ function process2JSONLD ()
     do
 
        setTimestamp
-       printf "start uploading to ES in <%s>\n" ${dir} >> ${LOGFILE}
-
-       printf "unzip the files with Search documents" >> ${LOGFILE}
-       #gunzip ${POSTDIRBASE}/$dir/*.gz
+       printf "start uploading to ES in <%s>\n" ${DOCS_BASEDIR_INPUT}/${subdir} >> ${LOGFILE}
 
        for rdfxmlFile in `ls ${DOCS_BASEDIR_INPUT}/${subdir}`
        do
+            printf "processing file <%s>\n" ${DOCS_BASEDIR_INPUT}/${subdir}/${rdfxmlFile} >> ${LOGFILE}
             python ${TRANSFORMATION_SCRIPT} --indctrl=${ES_INDEX_FILE} \
                                         --filemode \
                                         --oneline \
+                                        --bulksize=10000 \
                                         --outsubDir=${DOCS_BASEDIR_OUTPUT} \
                                         ${DOCS_BASEDIR_INPUT}/${subdir}/${rdfxmlFile} \
                                         ${JSONLD_FRAME_FILE}
