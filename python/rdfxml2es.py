@@ -160,7 +160,7 @@ class Rdfxml2Es:
 
                     self.of.write('\n')
             #perhaps flush it only in bigger chunks? - later
-            self.of.flush()
+            #self.of.flush()
             del self.esdocs[:]
             if self.writtenDocuments >= self.bulksize:
                 self._closeFile()
@@ -179,9 +179,13 @@ class Rdfxml2Es:
     def _openFile (self):
 
         subDir = self.outsubDir + os.sep + self.currentSubDir.__str__()
+
         if not os.path.isdir (subDir):
             os.mkdir(subDir)
-        elif self.openedFilesInSubDir >= self.numberOfFilesInSubDir:
+        #every time the script is started, the number of current subdirs is again 1 so we neeed to check
+        #hown much files are already stored in the current subdir
+        elif self.openedFilesInSubDir >= self.numberOfFilesInSubDir or len([name for name in os.listdir(subDir)]) \
+                >= self.numberOfFilesInSubDir :
             self.currentSubDir +=  1
             subDir = self.outsubDir + os.sep + self.currentSubDir.__str__()
             if not os.path.isdir (subDir):
