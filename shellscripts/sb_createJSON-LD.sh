@@ -14,8 +14,9 @@ CURRENT_TIMESTAMP=`date +%Y%m%d%H%M%S`
 
 function usage()
 {
-    #example:
-    #./shellscripts/sb_createJSON-LD.sh -o/swissbib_index/linkedProcessing/jsonld.bulk.files -l/swissbib_index/linkedProcessing/log -i/swissbib_index/linkedProcessing/linkedRDFOutput -f/home/swissbib/environment/code/linkedSwissbib/utilities/examples/04/frame.jsonld -e/home/swissbib/environment/code/linkedSwissbib/utilities/examples/04/indctrl.json -b22000 -slocalhost -p9200
+    #on sb-s2 / sb-s6 / sb-s7
+     #cd $WORKFLOWS
+    #./utilities/shellscripts/sb_createJSON-LD.sh -o${DATA_BASE}/jsonld.bulk.files -l${DATA_BASE}/log -i${DATA_BASE}/linkedRDFOutput -f${WORKFLOWS}/utilities/examples/04/frame.jsonld -e${WORKFLOWS}/utilities/examples/04/indctrl.json -b42000 -slocalhost -p8080 > process.jsonld.log 2>&1 &
 
      printf "usage: $0 -o[BASEDIR for writing the created json-ld files] -i[basic input directory for RDF/XML files to be transformed in Json-LD] -l[base dir log] -b[bulksize - optional default 21000] -e [Indexfile to create ES INdex] -f[Framing file for JSON-ld] -s[server: default - localhost] -p[ES server port - default 9200]"
      echo ""
