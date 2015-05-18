@@ -5,14 +5,6 @@
 
 export PATH=/home/swissbib/environment/tools/python3/env/bin:$PATH
 
-DOCS_BASEDIR=/swissbib_index/linkedProcessing
-DOCS_BASEDIR_INPUT=${DOCS_BASEDIR}/linkedRDFOutput
-DOCS_BASEDIR_OUTPUT=${DOCS_BASEDIR}/json.es.bulk
-LOG_DIR=${DOCS_BASEDIR}/log
-LOGFILE=${LOG_DIR}/ES_UPLOAD.log
-TRANSFORMATION_SCRIPT=/home/swissbib/environment/code/linkedSwissbib/utilities/python/rdfxml2es.py
-ES_INDEX_FILE=/home/swissbib/environment/code/linkedSwissbib/utilities/examples/04/indctrl.json
-JSONLD_FRAME_FILE=/home/swissbib/environment/code/linkedSwissbib/utilities/examples/04/frame.jsonld
 
 
 CURRENT_TIMESTAMP=`date +%Y%m%d%H%M%S`
@@ -22,7 +14,10 @@ CURRENT_TIMESTAMP=`date +%Y%m%d%H%M%S`
 
 function usage()
 {
- printf "usage: $0 "
+    #./sb_createJSON-LD.sh -o/swissbib_index/linkedProcessing/jsonld.bulk.files -l/swissbib_index/linkedProcessing/log -i/swissbib_index/linkedProcessing/linkedRDFOutput -f/home/swissbib/environment/code/linkedSwissbib/utilities/examples/04/frame.jsonld -e/home/swissbib/environment/code/linkedSwissbib/utilities/examples/04/indctrl.json
+     printf "usage: $0 -o[BASEDIR for writing the created json-ld files] -i[basic input directory for RDF/XML files to be transformed in Json-LD] -l[base dir log] -b[bulksize - optional default 21000] -e [Indexfile to create ES INdex] -f[Framing file for JSON-ld] "
+     echo ""
+
 }
 
 function setTimestamp()
@@ -33,30 +28,109 @@ function setTimestamp()
 
 function preChecks()
 {
-    echo "not used so far"
+    echo "options are going to be checked"
+
+
+
+    if [ ! -n "${DOCS_BASEDIR_OUTPUT}" ]
+    then
+            echo "option -o [DOCS_BASEDIR_OUTPUT] not set"  && usage && exit 9
+    fi
+
+    if [ ! -d ${DOCS_BASEDIR_OUTPUT} ]
+    then
+            echo "ERROR : base directory -->>${DOCS_BASEDIR_OUTPUT}<<-- for JSON-LD files does not exist!\n"  && usage && exit 9
+    fi
+
+
+    if [ ! -n "${LOG_DIR}" ]
+    then
+            echo "option -l [LOG_DIR] not set"  && usage && exit 9
+    fi
+
+    if [ ! -d ${LOG_DIR} ]
+    then
+            echo "ERROR : base directory -->>${LOG_DIR}<<-- for logging files does not exist!\n"  && usage && exit 9
+    fi
+
+    if [ ! -n "${DOCS_BASEDIR_INPUT}" ]
+    then
+            echo "option -i [DOCS_BASEDIR_INPUT] not set"  && usage && exit 9
+    fi
+
+    if [ ! -d ${DOCS_BASEDIR_INPUT} ]
+    then
+            echo "ERROR : base directory -->>${DOCS_BASEDIR_INPUT}<<-- for files to be transformed into Json-ld does not exist!\n"  && usage && exit 9
+    fi
+
+
+    if [ ! -n "${FRAMING}" ]
+    then
+            echo "option -f [framing file] not set"  && usage && exit 9
+    fi
+
+    if [ ! -f ${FRAMING} ]
+    then
+            echo "framing file -->>${FRAMING}<<--  does not exist!\n"  && usage && exit 9
+    fi
+
+
+
+    if [ ! -n "${ES_INDEX_FILE}" ]
+    then
+            echo "option -e [index file] not set"  && usage && exit 9
+    fi
+
+    if [ ! -f ${ES_INDEX_FILE} ]
+    then
+            echo "index file -->>${ES_INDEX_FILE}<<--  does not exist!\n"  && usage && exit 9
+    fi
+
+    if [ ! -n "${BULKSIZE}" ]
+    then
+            BULKSIZE=22000
+            echo "BULKSIZE was set to 22000"
+    fi
+
+
+
+
+    echo "pre checks successful"
 }
 
 
 function process2JSONLD ()
 {
 
+    SHELLPATH=`dirname $BASH_SOURCE`
+
 
    for subdir in `ls ${DOCS_BASEDIR_INPUT}`
     do
 
        setTimestamp
-       printf "start uploading to ES in <%s>\n" ${DOCS_BASEDIR_INPUT}/${subdir} >> ${LOGFILE}
+       printf "transformation to JSON-LD started for subdir <%s>\n" ${DOCS_BASEDIR_INPUT}/${subdir} >> ${LOGFILE}
 
        for rdfxmlFile in `ls ${DOCS_BASEDIR_INPUT}/${subdir}`
        do
-            printf "processing file <%s>\n" ${DOCS_BASEDIR_INPUT}/${subdir}/${rdfxmlFile} >> ${LOGFILE}
-            python ${TRANSFORMATION_SCRIPT} --indctrl=${ES_INDEX_FILE} \
+
+           setTimestamp
+
+            BASEFILENAME=`basename ${rdfxmlFile} .gz`
+            gunzip ${DOCS_BASEDIR_INPUT}/${subdir}/${rdfxmlFile}
+
+            printf "processing file <%s>\n" ${DOCS_BASEDIR_INPUT}/${subdir}/${BASEFILENAME} >> ${LOGFILE}
+            python ${SHELLPATH}/../python/rdfxml2es.py   \
+                                        --indctrl=${ES_INDEX_FILE} \
                                         --filemode \
                                         --oneline \
-                                        --bulksize=10000 \
+                                        --bulksize=${BULKSIZE} \
                                         --outsubDir=${DOCS_BASEDIR_OUTPUT} \
-                                        ${DOCS_BASEDIR_INPUT}/${subdir}/${rdfxmlFile} \
-                                        ${JSONLD_FRAME_FILE}
+                                        ${DOCS_BASEDIR_INPUT}/${subdir}/${BASEFILENAME} \
+                                        ${FRAMING}   >>   ${LOGFILE_PYTHON} 2>&1
+
+            gzip ${DOCS_BASEDIR_INPUT}/${subdir}/${BASEFILENAME}
+
        done
 
 
@@ -65,6 +139,35 @@ function process2JSONLD ()
 
 }
 
+while getopts hi:e:o:l:b:f: OPTION
+do
+  case $OPTION in
+    h) usage
+	exit 9
+	;;
+	i) DOCS_BASEDIR_INPUT=$OPTARG   #basic input directory
+	;;
+	e) ES_INDEX_FILE=$OPTARG
+	;;
+	o) DOCS_BASEDIR_OUTPUT=$OPTARG      #basic output directory outputbasedir
+	;;
+    l) LOG_DIR=$OPTARG              #Logdirectory
+    ;;
+    b) BULKSIZE=$OPTARG
+    ;;
+    f) FRAMING=$OPTARG
+    ;;
+    *) printf "unknown option -%c\n" $OPTION; usage; exit;;
+  esac
+done
+
+preChecks
+
+LOGFILE=${LOG_DIR}/ES_CREATE_JSON_PROCESS.log
+LOGFILE_PYTHON=${LOG_DIR}/ES_CREATE_JSON.log
+
 setTimestamp
+
 process2JSONLD
+
 
