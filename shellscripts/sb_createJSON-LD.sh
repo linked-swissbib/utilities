@@ -3,7 +3,7 @@
 #Guenter Hipler 15.5.2015
 
 
-export PATH=/home/swissbib/environment/tools/python3/env/bin:$PATH
+#export PATH=/home/swissbib/environment/tools/python3/env/bin:$PATH
 
 
 
@@ -14,8 +14,10 @@ CURRENT_TIMESTAMP=`date +%Y%m%d%H%M%S`
 
 function usage()
 {
-    #./sb_createJSON-LD.sh -o/swissbib_index/linkedProcessing/jsonld.bulk.files -l/swissbib_index/linkedProcessing/log -i/swissbib_index/linkedProcessing/linkedRDFOutput -f/home/swissbib/environment/code/linkedSwissbib/utilities/examples/04/frame.jsonld -e/home/swissbib/environment/code/linkedSwissbib/utilities/examples/04/indctrl.json
-     printf "usage: $0 -o[BASEDIR for writing the created json-ld files] -i[basic input directory for RDF/XML files to be transformed in Json-LD] -l[base dir log] -b[bulksize - optional default 21000] -e [Indexfile to create ES INdex] -f[Framing file for JSON-ld] "
+    #example:
+    #./shellscripts/sb_createJSON-LD.sh -o/swissbib_index/linkedProcessing/jsonld.bulk.files -l/swissbib_index/linkedProcessing/log -i/swissbib_index/linkedProcessing/linkedRDFOutput -f/home/swissbib/environment/code/linkedSwissbib/utilities/examples/04/frame.jsonld -e/home/swissbib/environment/code/linkedSwissbib/utilities/examples/04/indctrl.json -b22000 -slocalhost -p9200
+
+     printf "usage: $0 -o[BASEDIR for writing the created json-ld files] -i[basic input directory for RDF/XML files to be transformed in Json-LD] -l[base dir log] -b[bulksize - optional default 21000] -e [Indexfile to create ES INdex] -f[Framing file for JSON-ld] -s[server: default - localhost] -p[ES server port - default 9200]"
      echo ""
 
 }
@@ -92,6 +94,17 @@ function preChecks()
             echo "BULKSIZE was set to 22000"
     fi
 
+    if [ ! -n "${SERVER}" ]
+    then
+            SERVER=localhost
+            echo "ES server was set to localhost"
+    fi
+
+    if [ ! -n "${PORT}" ]
+    then
+            PORT=9200
+            echo "Port was set to 9200"
+    fi
 
 
 
@@ -126,6 +139,8 @@ function process2JSONLD ()
                                         --oneline \
                                         --bulksize=${BULKSIZE} \
                                         --outsubDir=${DOCS_BASEDIR_OUTPUT} \
+                                        --host=${SERVER}        \
+                                        --port=${PORT}          \
                                         ${DOCS_BASEDIR_INPUT}/${subdir}/${BASEFILENAME} \
                                         ${FRAMING}   >>   ${LOGFILE_PYTHON} 2>&1
 
@@ -139,7 +154,7 @@ function process2JSONLD ()
 
 }
 
-while getopts hi:e:o:l:b:f: OPTION
+while getopts hi:e:o:l:b:f:s:p: OPTION
 do
   case $OPTION in
     h) usage
@@ -156,6 +171,10 @@ do
     b) BULKSIZE=$OPTARG
     ;;
     f) FRAMING=$OPTARG
+    ;;
+    s) SERVER=$OPTARG
+    ;;
+    p) PORT=$OPTARG
     ;;
     *) printf "unknown option -%c\n" $OPTION; usage; exit;;
   esac
