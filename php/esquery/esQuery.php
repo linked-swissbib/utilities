@@ -8,16 +8,22 @@
 
 require 'vendor/autoload.php';
 
-class esQuery {
-
-    function __construct($connections, $index, $type) {
+class esQuery
+{
+    /**
+     * @param array $connections: Connections to Elasticsearch nodes as host => port pairs
+     * @param string $index: Name of Elasticsearch index
+     * @param string $type: Name of Elasticsearch type
+     */
+    function __construct($connections, $index, $type)
+    {
 
         // Create client
         $client = new Elastica\Client();
 
-        // Define connections to node. Seems a bit verbose, but if we choose the way described on
-        // http://elastica.io/getting-started/installation.html it will throw an error
-        foreach($connections as $host => $port) {
+        // Define connections to node. Seems a bit verbose, but if we chose the way described on
+        // http://elastica.io/getting-started/installation.html it crashed
+        foreach ($connections as $host => $port) {
             $connobj = new Elastica\Connection();
             $connobj->setHost($host);
             $connobj->setPort($port);
@@ -41,10 +47,12 @@ class esQuery {
 
 
     /**
-     * @param array $field
+     * Creates a match query fragment
+     * @param array $field: Field name and value as field => value
      * @return \Elastica\Query\Match
      */
-    protected function createMatchFrag($field = array()) {
+    protected function createMatchFrag($field = array())
+    {
         $frag = new Elastica\Query\Match();
         $frag->setField(array_keys($field)[0], $field[array_keys($field)[0]]);
         return $frag;
@@ -52,10 +60,12 @@ class esQuery {
 
 
     /**
-     * @param array $field
+     * Creates a range query fragment
+     * @param array $field: Field name and value as field => value
      * @return \Elastica\Query\Range
      */
-    protected function createRangeFrag($field = array()) {
+    protected function createRangeFrag($field = array())
+    {
         $frag = new Elastica\Query\Range();
         $frag->addField(array_keys($field)[0], $field[array_keys($field)[0]]);
         return $frag;
@@ -63,10 +73,12 @@ class esQuery {
 
 
     /**
-     * @param array $field
+     * Creates a term query fragment
+     * @param array $field: Field name and value as field => value
      * @return \Elastica\Query\Term
      */
-    protected function createTermFrag($field = array()) {
+    protected function createTermFrag($field = array())
+    {
         $frag = new Elastica\Query\Term();
         $frag->setTerm(array_keys($field)[0], $field[array_keys($field)[0]]);
         return $frag;
@@ -74,11 +86,13 @@ class esQuery {
 
 
     /**
-     * @param $qtype
-     * @param $field
+     * Creates an enwrapping bool query fragment
+     * @param string $qtype: Type of query. Possible values are 'match', 'range' and 'term'
+     * @param $field: Field name and value as field => value
      * @return \Elastica\Query\Match|\Elastica\Query\Range|\Elastica\Query\Term|null
      */
-    protected function createFrag($qtype, $field) {
+    protected function createFrag($qtype, $field)
+    {
         switch ($qtype) {
             case 'match':
                 $frag = $this->createMatchFrag($field);
@@ -97,12 +111,14 @@ class esQuery {
 
 
     /**
-     * @param $nested
-     * @param $qtype
-     * @param array $field
+     * Wraps query fragment as nested query if nested=true
+     * @param bool $nested: Build as nested query element (i.e. look for field value in dc:contributor)
+     * @param string $qtype: Type of query. Possible values are 'match', 'range' and 'term'
+     * @param array $field: Field name and value as field => value
      * @return \Elastica\Query\Match|\Elastica\Query\Nested|\Elastica\Query\Range|\Elastica\Query\Term
      */
-    protected function createNestedFrag($nested, $qtype, $field = array()) {
+    protected function createNestedFrag($nested, $qtype, $field = array())
+    {
         if ($nested) {
             $wrapper = new Elastica\Query\Nested();
             $wrapper->setPath('dc:contributor');
@@ -115,12 +131,14 @@ class esQuery {
 
 
     /**
-     * @param $bool
-     * @param bool $nested
-     * @param $qtype
-     * @param $field
+     * Add a query element
+     * @param string $bool: Logical connective. Possible values are 'and', 'or' and 'not'
+     * @param bool $nested: Build as nested query element (i.e. look for field value in dc:contributor)
+     * @param string $qtype: Type of query. Possible values are 'match', 'range' and 'term'
+     * @param array $field: Field name and value as field => value
      */
-    public function add($bool, $nested = false, $qtype, $field) {
+    public function add($bool, $nested = false, $qtype, $field)
+    {
         switch ($bool) {
             case 'and':
                 $this->body->addMust($this->createNestedFrag($nested, $qtype, $field));
@@ -136,55 +154,96 @@ class esQuery {
 
 
     /**
-     * @param $limit
+     * Performs query
+     * @param int $limit: Max search results
      */
-    public function search($limit) {
+    public function search($limit)
+    {
         $this->query->setQuery($this->body);
         $this->resultSet = $this->search->search($this->query, $limit);
     }
 
 
-    public function tojsonld() {
+    /**
+     * Converts query results to flattened JSON-LD objects
+     * @return array: Array with the flattened JSON-LD objects of the results
+     */
+    public function tojsonld()
+    {
         $results = array();
-        foreach($this->resultSet->getResults() as $doc) {
-            //var_dump($doc);
+        foreach ($this->resultSet->getResults() as $doc) {
             $result = $doc->getData();
             $context = (object)$result['@context'];
             unset($result['@context']);
-            $results[] = jsonld_compact((object)$result, $context);
-//            $results[] = json_encode($result,
-//                JSON_UNESCAPED_SLASHES |
-//                // JSON_PRETTY_PRINT |
-//                JSON_UNESCAPED_UNICODE);
+            $bnodes = $result['dc:contributor'];
+            unset($result['dc:contributor']);
+            $graph = array();
+            foreach ($bnodes as $bnode) {
+                $graph[] = $bnode;
+                $graph[] = $bnode;
+                $result['dc:contributor'][] = $bnode['@id'];
+            }
+            $graph[] = $result;
+            $results[] = jsonld_flatten(json_decode(json_encode($graph), FALSE), $context);
         }
         return $results;
     }
 
 
-    public function tottl() {
-        // Todo: Should we use EasyRDF to convert from Nquads to Turtle?
+    /**
+     * Loads JSON-Documents into an graph object
+     * @param object $doc : Document to be loaded
+     * @return EasyRdf_Graph
+     */
+    protected function json2rdf($doc)
+    {
+        $graph = new EasyRdf_Graph();
+        $result = $doc->getData();
+        $result = json_decode(json_encode($result));
+        $rdf = json_decode(json_encode(jsonld_to_rdf($result, FALSE)), TRUE);
+        foreach ($rdf['@default'] as $triple) {
+            switch ($triple['object']['type']) {
+                case 'literal':
+                    $graph->addLiteral($triple['subject']['value'],
+                        $triple['predicate']['value'],
+                        $triple['object']['value']);
+                    break;
+                case 'IRI':
+                    $graph->addResource($triple['subject']['value'],
+                        $triple['predicate']['value'],
+                        $triple['object']['value']);
+                    break;
+                case 'blank node':
+                    $graph->addResource($triple['subject']['value'],
+                        $triple['predicate']['value'],
+                        $triple['object']['value']);
+            }
+        }
+        return $graph;
     }
 
-    public function tonquads() {
-        // Todo: Blank nodes should be recreated instead of just being "dropped"
-        return jsonld_normalize($this->tojsonld(), array('format' => 'application/nquads'));
+
+    /**
+     * Serialise RDF-Graph into a specified format
+     * @param string $format : Target format. Possible values are:
+     * json, jsonld (with ml/json-ld installed), n3, ntriples, rdfxml, turtle; php (Array); dot; gif, png, svg
+     * @return array: Array containing the serialised documents
+     */
+    public function serialise($format)
+    {
+        $bag = array();
+        foreach ($this->resultSet->getResults() as $doc) {
+            $graph = $this->json2rdf($doc);
+            $bag[] = $graph->serialise($format);
+        }
+        return $bag;
     }
 
-    public function tordfa() {
-        // Todo: Should we use EasyRDF to convert from Nquads to RDFa?
+
+    public function tonquads()
+    {
+        //return jsonld_expand($this->tojsonld());
+        return jsonld_normalize(jsonld_expand($this->tojsonld()), array('format' => 'application/nquads'));
     }
+
 }
-
-// Just a small example. Replace <hostX>, <portX>, <index> and <type> with the respective nodes, index and type of ES
-$test = new esQuery([
-    '<host1>' => <port1>,
-    '<host2>' => <port2>,
-    '<port1>' => <port3>], '<index>', '<type>');
-// $test->add('or', false, 'match', ['dct:title' => 'test']);
-// $test->add('or', true, 'match', ['foaf:firstName' => 'John']);
-// $test->add('and', false, 'range', ['dct:issued' => ['from' => '1900', 'to' => '2010']]);
-$test->add('and', false, 'match', ['_all' => 'Carl']);
-$test->add('not', false, 'match', ['dct:title' => 'Carl']);
-$test->search(50);
-//$test->tojsonld();
-print_r($test->tonquads());
