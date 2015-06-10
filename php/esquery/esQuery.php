@@ -166,27 +166,23 @@ class esQuery
 
     /**
      * Converts query results to flattened JSON-LD objects
+     * @param object $doc : Document to be loaded
      * @return array: Array with the flattened JSON-LD objects of the results
      */
-    public function tojsonld()
+    protected function writejsonld($doc)
     {
-        $results = array();
-        foreach ($this->resultSet->getResults() as $doc) {
-            $result = $doc->getData();
-            $context = (object)$result['@context'];
-            unset($result['@context']);
-            $bnodes = $result['dc:contributor'];
-            unset($result['dc:contributor']);
-            $graph = array();
-            foreach ($bnodes as $bnode) {
-                $graph[] = $bnode;
-                $graph[] = $bnode;
-                $result['dc:contributor'][] = $bnode['@id'];
-            }
-            $graph[] = $result;
-            $results[] = jsonld_flatten(json_decode(json_encode($graph), FALSE), $context);
+        $context = (object)$doc['@context'];
+        unset($doc['@context']);
+        $bnodes = $doc['dc:contributor'];
+        unset($doc['dc:contributor']);
+        $graph = array();
+        foreach ($bnodes as $bnode) {
+            $graph[] = $bnode;
+            $graph[] = $bnode;
+            $doc['dc:contributor'][] = $bnode['@id'];
         }
-        return $results;
+        $graph[] = $doc;
+        return jsonld_flatten(json_decode(json_encode($graph), FALSE), $context);
     }
 
 
@@ -195,12 +191,11 @@ class esQuery
      * @param object $doc : Document to be loaded
      * @return EasyRdf_Graph
      */
-    protected function json2rdf($doc)
+    protected function creategraph($doc)
     {
         $graph = new EasyRdf_Graph();
-        $result = $doc->getData();
-        $result = json_decode(json_encode($result));
-        $rdf = json_decode(json_encode(jsonld_to_rdf($result, FALSE)), TRUE);
+        $result = json_decode(json_encode($doc));
+        $rdf = json_decode(json_encode(jsonld_to_rdf($result)), TRUE);
         foreach ($rdf['@default'] as $triple) {
             switch ($triple['object']['type']) {
                 case 'literal':
@@ -226,24 +221,22 @@ class esQuery
     /**
      * Serialise RDF-Graph into a specified format
      * @param string $format : Target format. Possible values are:
-     * json, jsonld (with ml/json-ld installed), n3, ntriples, rdfxml, turtle; php (Array); dot; gif, png, svg
+     * json, jsonld, n3, ntriples, rdfxml, turtle; php (Array); dot; gif, png, svg
      * @return array: Array containing the serialised documents
      */
-    public function serialise($format)
+    public function serialiserdf($format)
     {
         $bag = array();
         foreach ($this->resultSet->getResults() as $doc) {
-            $graph = $this->json2rdf($doc);
-            $bag[] = $graph->serialise($format);
+            $result = $doc->getData();
+            if($format == 'jsonld') {
+                $bag[] = $this->writejsonld($result);
+            } else {
+                $graph = $this->creategraph($result);
+                $bag[] = $graph->serialise($format);
+            }
         }
         return $bag;
-    }
-
-
-    public function tonquads()
-    {
-        //return jsonld_expand($this->tojsonld());
-        return jsonld_normalize(jsonld_expand($this->tojsonld()), array('format' => 'application/nquads'));
     }
 
 }
