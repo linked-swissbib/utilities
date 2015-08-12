@@ -392,203 +392,217 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
       }
     },
     "foaf:Person": {
-      "dbp:birthYear": {
-        "index": "not_analyzed",
-        "type": "string"
-      },
-      "dbp:deathYear": {
-        "index": "not_analyzed",
-        "type": "string"
-      },
-      "foaf:firstName": {
-        "index": "analyzed",
-        "type": "string"
-      },
-      "foaf:lastName": {
-        "index": "analyzed",
-        "type": "string"
-      },
-      "foaf:name": {
-        "index": "analyzed",
-        "type": "string"
-      },
-      "rdfs:label": {
-        "index": "analyzed",
-        "type": "string"
-      },
-      "skos:note": {
-        "index": "analyzed",
-        "type": "string"
+      "dynamic": "strict",
+      "properties": {
+        "dbp:birthYear": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "dbp:deathYear": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "foaf:firstName": {
+          "index": "analyzed",
+          "type": "string"
+        },
+        "foaf:lastName": {
+          "index": "analyzed",
+          "type": "string"
+        },
+        "foaf:name": {
+          "index": "analyzed",
+          "type": "string"
+        },
+        "rdfs:label": {
+          "index": "analyzed",
+          "type": "string"
+        },
+        "skos:note": {
+          "index": "analyzed",
+          "type": "string"
+        }
       }
     },
     "foaf:Organization": {
-      "rdfs:label": {
-        "de": {
-          "index": "analyzed",
-          "type": "string"
-        },
-        "fr": {
-          "index": "analyzed",
-          "type": "string"
-        },
-        "it": {
-          "index": "analyzed",
-          "type": "string"
-        },
-        "en": {
-          "index": "analyzed",
-          "type": "string"
-        }
-      },
-      "dbp:isil": {
-        "index": "not_analyzed",
-        "type": "string"
-      },
-      "foaf:name": {
-        "de": {
-          "index": "analyzed",
-          "type": "string"
-        },
-        "fr": {
-          "index": "analyzed",
-          "type": "string"
-        },
-        "it": {
-          "index": "analyzed",
-          "type": "string"
-        },
-        "en": {
-          "index": "analyzed",
-          "type": "string"
-        }
-      },
-      "foaf:homepage": {
-        "properties": {
-          "@id": {
-            "index": "not_analyzed",
-            "type": "string"
-          }
-        }
-      },
-      "foaf:mbox": {
-        "properties": {
-          "@id": {
-            "index": "not_analyzed",
-            "type": "string"
-          }
-        }
-      },
-      "foaf:phone": {
-        // Todo: Is it really necessary to define a phone number as rdf:resource (i.e. @id)
-        "properties": {
-          "@id": {
-            "index": "not_analyzed",
-            "type": "string"
-          }
-        }
-      },
-      "vcard:hasAddress": {
-        // Implemented as inner object. Or is it possible for an organization to have several addresses?
-        "vcard:Address": {
-          "vcard:street-address": {
-            "index": "analyzed",
-            "type": "string"
-          },
-          "vcard:postal-code": {
-            "index": "analyzed",
-            "type": "string"
-          },
-          "vcard:locality": {
-            "index": "analyzed",
-            "type": "string"
-          },
-          "vcard:locality": {
-            "properties": {
-              "@id": {
-                "index": "not_analyzed",
-                "type": "string"
-              }
-            }
-          }
-        }
-      },
-/*      "bf:HeldItem": {
-        // Todo: Implement rdf:about, bf:holdingFor, collectItemValues, bibo:locator, bibo:owner; maybe others
-        // Todo: Don't forget XML labels!
-      },*/
-      "bf:Work": {
-        "dynamic": "strict",
-        "properties": {
-          "@id": {
-            "index": "not_analyzed",
-            "type": "string"
-          },
-          "@type": {
-            "index": "no",
-            "type": "string"
-          },
-          "@context": {
-            "properties": {
-              "bibo": {
-                "index": "no",
-                "type": "string"
-              },
-              "dbp": {
-                "index": "no",
-                "type": "string"
-              },
-              "dc": {
-                "index": "no",
-                "type": "string"
-              },
-              "dct": {
-                "index": "no",
-                "type": "string"
-              },
-              "foaf": {
-                "index": "no",
-                "type": "string"
-              },
-              "rdau": {
-                "index": "no",
-                "type": "string"
-              },
-              "rdf": {
-                "index": "no",
-                "type": "string"
-              },
-              "rdfs": {
-                "index": "no",
-                "type": "string"
-              },
-              "skos": {
-                "index": "no",
-                "type": "string"
-              },
-              "xsd": {
-                "index": "no",
-                "type": "string"
-              }
+      "dynamic": "strict",
+      "properties": {
+        "rdfs:label": {
+          "properties": {
+            "de": {
+              "index": "analyzed",
+              "type": "string"
             },
-            "type": "object"
-          },
-          "dct:contributor": {
-            "analyzer": "autocomplete",
-            "index": "analyzed",
-            "type": "string"
-          },
-          "bf:hasInstance": {
-            "properties": {
-              "@id": {
-                "index": "not_analyzed",
-                "type": "string"
+            "fr": {
+              "index": "analyzed",
+              "type": "string"
+            },
+            "it": {
+              "index": "analyzed",
+              "type": "string"
+            },
+            "en": {
+              "index": "analyzed",
+              "type": "string"
+            }
+          }
+        },
+        "dbp:isil": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "foaf:name": {
+          "properties": {
+            "de": {
+              "index": "analyzed",
+              "type": "string"
+            },
+            "fr": {
+              "index": "analyzed",
+              "type": "string"
+            },
+            "it": {
+              "index": "analyzed",
+              "type": "string"
+            },
+            "en": {
+              "index": "analyzed",
+              "type": "string"
+            }
+          }
+        },
+        "foaf:homepage": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
+        },
+        "foaf:mbox": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
+        },
+        "foaf:phone": {
+          // Todo: Is it really necessary to define a phone number as rdf:resource (i.e. @id)
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
+        },
+        "vcard:hasAddress": {
+          // Implemented as inner object. Or is it possible for an organization to have several addresses?
+          "properties": {
+            "vcard:Address": {
+              "properties": {
+                "vcard:street-address": {
+                  "index": "analyzed",
+                  "type": "string"
+                },
+                "vcard:postal-code": {
+                  "index": "analyzed",
+                  "type": "string"
+                },
+                "vcard:locality": {
+                  "index": "analyzed",
+                  "type": "string"
+                },
+                "vcard:hasRegion": {
+                  "properties": {
+                    "@id": {
+                      "index": "not_analyzed",
+                      "type": "string"
+                    }
+                  }
+                }
               }
             }
-          },
-          "dct:title": {
-            "index": "not_analyzed",
-            "type": "string"
           }
+        }
+      }
+    },
+    // "bf:HeldItem": {
+    // Todo: Implement rdf:about, bf:holdingFor, collectItemValues, bibo:locator, bibo:owner; maybe others
+    // Todo: Don't forget XML labels!
+    // },
+    "bf:Work": {
+      "dynamic": "strict",
+      "properties": {
+        "@id": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "@type": {
+          "index": "no",
+          "type": "string"
+        },
+        "@context": {
+          "properties": {
+            "bibo": {
+              "index": "no",
+              "type": "string"
+            },
+            "dbp": {
+              "index": "no",
+              "type": "string"
+            },
+            "dc": {
+              "index": "no",
+              "type": "string"
+            },
+            "dct": {
+              "index": "no",
+              "type": "string"
+            },
+            "foaf": {
+              "index": "no",
+              "type": "string"
+            },
+            "rdau": {
+              "index": "no",
+              "type": "string"
+            },
+            "rdf": {
+              "index": "no",
+              "type": "string"
+            },
+            "rdfs": {
+              "index": "no",
+              "type": "string"
+            },
+            "skos": {
+              "index": "no",
+              "type": "string"
+            },
+            "xsd": {
+              "index": "no",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "dct:contributor": {
+          "analyzer": "autocomplete",
+          "index": "analyzed",
+          "type": "string"
+        },
+        "bf:hasInstance": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
+        },
+        "dct:title": {
+          "index": "not_analyzed",
+          "type": "string"
         }
       }
     }
