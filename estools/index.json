@@ -48,7 +48,7 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
     }
   },
   "mappings": {
-    "bibliographicResource": {
+    "dct:bibliographicResource": {
       "dynamic": "strict",
       "properties": {
         "@context": {
@@ -295,7 +295,7 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
         }
       }
     },
-    "document": {
+    "bibo:document": {
       "dynamic": "strict",
       "properties": {
         "@context": {
