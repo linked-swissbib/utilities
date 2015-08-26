@@ -53,6 +53,10 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
       "properties": {
         "@context": {
           "properties": {
+            "bf": {
+              "index": "no",
+              "type": "string"
+            },
             "bibo": {
               "index": "no",
               "type": "string"
@@ -103,6 +107,14 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
         "@type": {
           "index": "no",
           "type": "string"
+        },
+        "bf:instanceOf": {
+          "properties": {
+            "@id": {
+              "index": "analyzed",
+              "type": "string"
+            }
+          }
         },
         "bibo:edition": {
           "index": "analyzed",
@@ -300,6 +312,10 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
       "properties": {
         "@context": {
           "properties": {
+            "bf": {
+              "index": "no",
+              "type": "string"
+            },
             "bibo": {
               "index": "no",
               "type": "string"
@@ -544,6 +560,10 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
         },
         "@context": {
           "properties": {
+            "bf": {
+              "index": "no",
+              "type": "string"
+            },
             "bibo": {
               "index": "no",
               "type": "string"
