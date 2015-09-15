@@ -48,7 +48,7 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
     }
   },
   "mappings": {
-    "dct:bibliographicResource": {
+    "_default_": {
       "dynamic": "strict",
       "properties": {
         "@context": {
@@ -77,7 +77,31 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
               "index": "no",
               "type": "string"
             },
+            "gnd": {
+              "index": "no",
+              "type": "string"
+            },
+            "owl": {
+              "index": "no",
+              "type": "string"
+            },
+            "rdac": {
+              "index": "no",
+              "type": "string"
+            },
+            "rdai": {
+              "index": "no",
+              "type": "string"
+            },
+            "rdam": {
+              "index": "no",
+              "type": "string"
+            },
             "rdau": {
+              "index": "no",
+              "type": "string"
+            },
+            "rdaw": {
               "index": "no",
               "type": "string"
             },
@@ -89,7 +113,15 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
               "index": "no",
               "type": "string"
             },
+            "schema": {
+              "index": "no",
+              "type": "string"
+            },
             "skos": {
+              "index": "no",
+              "type": "string"
+            },
+            "void": {
               "index": "no",
               "type": "string"
             },
@@ -107,7 +139,11 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
         "@type": {
           "index": "not_analyzed",
           "type": "string"
-        },
+        }
+      }
+    },
+    "bibliographicResource": {
+      "properties": {
         "bf:instanceOf": {
           "properties": {
             "@id": {
@@ -142,46 +178,13 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
           "type": "object"
         },
         "dc:contributor": {
-          //Todo: Reimplement as non-nested object -> Already?
           "properties": {
             "@id": {
               "index": "not_analyzed",
               "type": "string"
-            },
-            "@type": {
-              "index": "no",
-              "type": "string"
-            },
-            "dbp:birthYear": {
-              "index": "not_analyzed",
-              "type": "string"
-            },
-            "dbp:deathYear": {
-              "index": "not_analyzed",
-              "type": "string"
-            },
-            "foaf:firstName": {
-              "index": "analyzed",
-              "type": "string"
-            },
-            "foaf:lastName": {
-              "index": "analyzed",
-              "type": "string"
-            },
-            "foaf:name": {
-              "index": "analyzed",
-              "type": "string"
-            },
-            "rdfs:label": {
-              "index": "analyzed",
-              "type": "string"
-            },
-            "skos:note": {
-              "index": "analyzed",
-              "type": "string"
             }
           },
-          "type": "nested"
+          "type": "object"
         },
         "dc:format": {
           "index": "analyzed",
@@ -248,52 +251,197 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
           "type": "string"
         },
         "rdau:contentType": {
-          "properties": {
-            "@id": {
-              "index": "not_analyzed",
-              "type": "string"
+          "type": "object",
+          "fields": {
+            "de": {
+              "properties": {
+                "@id": {
+                  "index": "not_analyzed",
+                  "type": "string"
+                }
+              }
+            },
+            "en": {
+              "properties": {
+                "@id": {
+                  "index": "not_analyzed",
+                  "type": "string"
+                }
+              }
+            },
+            "fr": {
+              "properties": {
+                "@id": {
+                  "index": "not_analyzed",
+                  "type": "string"
+                }
+              }
+            },
+            "it": {
+              "properties": {
+                "@id": {
+                  "index": "not_analyzed",
+                  "type": "string"
+                }
+              }
             }
-          },
-          "type": "object"
+          }
         },
         "rdau:dissertationOrThesisInformation": {
           "index": "analyzed",
           "type": "string"
         },
         "rdau:mediaType": {
-          "properties": {
-            "@id": {
-              "index": "not_analyzed",
-              "type": "string"
+          "type": "object",
+          "fields": {
+            "de": {
+              "properties": {
+                "@id": {
+                  "index": "not_analyzed",
+                  "type": "string"
+                }
+              }
+            },
+            "en": {
+              "properties": {
+                "@id": {
+                  "index": "not_analyzed",
+                  "type": "string"
+                }
+              }
+            },
+            "fr": {
+              "properties": {
+                "@id": {
+                  "index": "not_analyzed",
+                  "type": "string"
+                }
+              }
+            },
+            "it": {
+              "properties": {
+                "@id": {
+                  "index": "not_analyzed",
+                  "type": "string"
+                }
+              }
             }
-          },
-          "type": "object"
+          }
         },
         "rdau:modeOfIssuance": {
-          "properties": {
-            "@id": {
-              "index": "not_analyzed",
-              "type": "string"
+          "type": "object",
+          "fields": {
+            "de": {
+              "properties": {
+                "@id": {
+                  "index": "not_analyzed",
+                  "type": "string"
+                }
+              }
+            },
+            "en": {
+              "properties": {
+                "@id": {
+                  "index": "not_analyzed",
+                  "type": "string"
+                }
+              }
+            },
+            "fr": {
+              "properties": {
+                "@id": {
+                  "index": "not_analyzed",
+                  "type": "string"
+                }
+              }
+            },
+            "it": {
+              "properties": {
+                "@id": {
+                  "index": "not_analyzed",
+                  "type": "string"
+                }
+              }
             }
-          },
-          "type": "object"
+          }
         },
         "rdau:noteOnResource": {
           "index": "not_analyzed",
           "type": "string"
         },
         "rdau:placeOfPublication": {
-          "properties": {
-            "@id": {
-              "index": "not_analyzed",
-              "type": "string"
+          "type": "object",
+          "fields": {
+            "de": {
+              "properties": {
+                "@id": {
+                  "index": "not_analyzed",
+                  "type": "string"
+                }
+              }
+            },
+            "en": {
+              "properties": {
+                "@id": {
+                  "index": "not_analyzed",
+                  "type": "string"
+                }
+              }
+            },
+            "fr": {
+              "properties": {
+                "@id": {
+                  "index": "not_analyzed",
+                  "type": "string"
+                }
+              }
+            },
+            "it": {
+              "properties": {
+                "@id": {
+                  "index": "not_analyzed",
+                  "type": "string"
+                }
+              }
             }
-          },
-          "type": "object"
+          }
         },
         "rdau:publicationStatement": {
-          "index": "analyzed",
-          "type": "string"
+          "type": "object",
+          "fields": {
+            "de": {
+              "properties": {
+                "@id": {
+                  "index": "not_analyzed",
+                  "type": "string"
+                }
+              }
+            },
+            "en": {
+              "properties": {
+                "@id": {
+                  "index": "not_analyzed",
+                  "type": "string"
+                }
+              }
+            },
+            "fr": {
+              "properties": {
+                "@id": {
+                  "index": "not_analyzed",
+                  "type": "string"
+                }
+              }
+            },
+            "it": {
+              "properties": {
+                "@id": {
+                  "index": "not_analyzed",
+                  "type": "string"
+                }
+              }
+            }
+          }
         },
         "rdfs:isDefinedBy": {
           "properties": {
@@ -307,70 +455,20 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
         }
       }
     },
-    "bibo:document": {
-      "dynamic": "strict",
+    "document": {
       "properties": {
-        "@context": {
-          "properties": {
-            "bf": {
-              "index": "no",
-              "type": "string"
-            },
-            "bibo": {
-              "index": "no",
-              "type": "string"
-            },
-            "dbp": {
-              "index": "no",
-              "type": "string"
-            },
-            "dc": {
-              "index": "no",
-              "type": "string"
-            },
-            "dct": {
-              "index": "no",
-              "type": "string"
-            },
-            "foaf": {
-              "index": "no",
-              "type": "string"
-            },
-            "rdau": {
-              "index": "no",
-              "type": "string"
-            },
-            "rdf": {
-              "index": "no",
-              "type": "string"
-            },
-            "rdfs": {
-              "index": "no",
-              "type": "string"
-            },
-            "skos": {
-              "index": "no",
-              "type": "string"
-            },
-            "xsd": {
-              "index": "no",
-              "type": "string"
-            }
-          },
-          "type": "object"
-        },
-        "@id": {
-          "index": "not_analyzed",
-          "type": "string"
-        },
-        "@type": {
-          "index": "no",
-          "type": "string"
-        },
         "dc:contributor": {
           "analyzer": "autocomplete",
           "index": "analyzed",
           "type": "string"
+        },
+        "dct:contributor": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
         },
         "dct:issued": {
           "properties": {
@@ -407,8 +505,7 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
         }
       }
     },
-    "foaf:Person": {
-      "dynamic": "strict",
+    "person": {
       "properties": {
         "dbp:birthYear": {
           "index": "not_analyzed",
@@ -440,8 +537,7 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
         }
       }
     },
-    "foaf:Organization": {
-      "dynamic": "strict",
+    "organization": {
       "properties": {
         "rdfs:label": {
           "properties": {
@@ -547,66 +643,8 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
     // Todo: Implement rdf:about, bf:holdingFor, collectItemValues, bibo:locator, bibo:owner; maybe others
     // Todo: Don't forget XML labels!
     // },
-    "bf:Work": {
-      "dynamic": "strict",
+    "work": {
       "properties": {
-        "@id": {
-          "index": "not_analyzed",
-          "type": "string"
-        },
-        "@type": {
-          "index": "no",
-          "type": "string"
-        },
-        "@context": {
-          "properties": {
-            "bf": {
-              "index": "no",
-              "type": "string"
-            },
-            "bibo": {
-              "index": "no",
-              "type": "string"
-            },
-            "dbp": {
-              "index": "no",
-              "type": "string"
-            },
-            "dc": {
-              "index": "no",
-              "type": "string"
-            },
-            "dct": {
-              "index": "no",
-              "type": "string"
-            },
-            "foaf": {
-              "index": "no",
-              "type": "string"
-            },
-            "rdau": {
-              "index": "no",
-              "type": "string"
-            },
-            "rdf": {
-              "index": "no",
-              "type": "string"
-            },
-            "rdfs": {
-              "index": "no",
-              "type": "string"
-            },
-            "skos": {
-              "index": "no",
-              "type": "string"
-            },
-            "xsd": {
-              "index": "no",
-              "type": "string"
-            }
-          },
-          "type": "object"
-        },
         "dct:contributor": {
           "analyzer": "autocomplete",
           "index": "analyzed",
