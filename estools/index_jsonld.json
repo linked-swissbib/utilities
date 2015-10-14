@@ -311,6 +311,7 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
             }
           }
         },
+
         "rdau:mediaType.de": {
           "properties": {
             "@id": {
@@ -439,6 +440,15 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
             }
           }
         },
+        "rdf:type" : {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
+        },
+
         "rdau:publicationStatement.de": {
           "index": "not_analyzed",
           "type": "string"
@@ -475,12 +485,9 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
           "type": "string"
         },
         "dct:contributor": {
-          "properties": {
-            "@id": {
-              "index": "not_analyzed",
-              "type": "string"
-            }
-          }
+            "index": "not_analyzed",
+            "type": "string"
+
         },
         "dct:issued": {
           "properties": {
