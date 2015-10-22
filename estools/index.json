@@ -177,7 +177,7 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
           },
           "type": "object"
         },
-        "dc:contributor": {
+        "dct:contributor": {
           "properties": {
             "@id": {
               "index": "not_analyzed",
@@ -250,198 +250,181 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
           "index": "analyzed",
           "type": "string"
         },
-        "rdau:contentType": {
-          "type": "object",
-          "fields": {
-            "de": {
-              "properties": {
-                "@id": {
-                  "index": "not_analyzed",
-                  "type": "string"
-                }
-              }
-            },
-            "en": {
-              "properties": {
-                "@id": {
-                  "index": "not_analyzed",
-                  "type": "string"
-                }
-              }
-            },
-            "fr": {
-              "properties": {
-                "@id": {
-                  "index": "not_analyzed",
-                  "type": "string"
-                }
-              }
-            },
-            "it": {
-              "properties": {
-                "@id": {
-                  "index": "not_analyzed",
-                  "type": "string"
-                }
-              }
+        "rdau:contentType.de": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
             }
           }
         },
-        "rdau:dissertationOrThesisInformation": {
+        "rdau:contentType.en": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
+        },
+        "rdau:contentType.fr": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
+        },
+        "rdau:contentType.it": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
+        },
+        "rdau:mediaType.de": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
+        },
+        "rdau:mediaType.en": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
+        },
+        "rdau:mediaType.fr": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
+        },
+        "rdau:mediaType.it": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
+        },
+        "rdau:dissertationOrThesisInformation.de": {
           "index": "analyzed",
           "type": "string"
         },
-        "rdau:mediaType": {
-          "type": "object",
-          "fields": {
-            "de": {
-              "properties": {
-                "@id": {
-                  "index": "not_analyzed",
-                  "type": "string"
-                }
-              }
-            },
-            "en": {
-              "properties": {
-                "@id": {
-                  "index": "not_analyzed",
-                  "type": "string"
-                }
-              }
-            },
-            "fr": {
-              "properties": {
-                "@id": {
-                  "index": "not_analyzed",
-                  "type": "string"
-                }
-              }
-            },
-            "it": {
-              "properties": {
-                "@id": {
-                  "index": "not_analyzed",
-                  "type": "string"
-                }
-              }
+        "rdau:dissertationOrThesisInformation.en": {
+          "index": "analyzed",
+          "type": "string"
+        },
+        "rdau:dissertationOrThesisInformation.fr": {
+          "index": "analyzed",
+          "type": "string"
+        },
+        "rdau:dissertationOrThesisInformation.it": {
+          "index": "analyzed",
+          "type": "string"
+        },
+        "rdau:modeOfIssuance.de": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
             }
           }
         },
-        "rdau:modeOfIssuance": {
-          "type": "object",
-          "fields": {
-            "de": {
-              "properties": {
-                "@id": {
-                  "index": "not_analyzed",
-                  "type": "string"
-                }
-              }
-            },
-            "en": {
-              "properties": {
-                "@id": {
-                  "index": "not_analyzed",
-                  "type": "string"
-                }
-              }
-            },
-            "fr": {
-              "properties": {
-                "@id": {
-                  "index": "not_analyzed",
-                  "type": "string"
-                }
-              }
-            },
-            "it": {
-              "properties": {
-                "@id": {
-                  "index": "not_analyzed",
-                  "type": "string"
-                }
-              }
+        "rdau:modeOfIssuance.en": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
             }
           }
         },
-        "rdau:noteOnResource": {
+        "rdau:modeOfIssuance.fr": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
+        },
+        "rdau:modeOfIssuance.it": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
+        },
+        "rdau:noteOnResource.de": {
           "index": "not_analyzed",
           "type": "string"
         },
-        "rdau:placeOfPublication": {
-          "type": "object",
-          "fields": {
-            "de": {
-              "properties": {
-                "@id": {
-                  "index": "not_analyzed",
-                  "type": "string"
-                }
-              }
-            },
-            "en": {
-              "properties": {
-                "@id": {
-                  "index": "not_analyzed",
-                  "type": "string"
-                }
-              }
-            },
-            "fr": {
-              "properties": {
-                "@id": {
-                  "index": "not_analyzed",
-                  "type": "string"
-                }
-              }
-            },
-            "it": {
-              "properties": {
-                "@id": {
-                  "index": "not_analyzed",
-                  "type": "string"
-                }
-              }
+        "rdau:noteOnResource.en": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "rdau:noteOnResource.fr": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "rdau:noteOnResource.it": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "rdau:placeOfPublication.de": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
             }
           }
         },
-        "rdau:publicationStatement": {
-          "type": "object",
-          "fields": {
-            "de": {
-              "properties": {
-                "@id": {
-                  "index": "not_analyzed",
-                  "type": "string"
-                }
-              }
-            },
-            "en": {
-              "properties": {
-                "@id": {
-                  "index": "not_analyzed",
-                  "type": "string"
-                }
-              }
-            },
-            "fr": {
-              "properties": {
-                "@id": {
-                  "index": "not_analyzed",
-                  "type": "string"
-                }
-              }
-            },
-            "it": {
-              "properties": {
-                "@id": {
-                  "index": "not_analyzed",
-                  "type": "string"
-                }
-              }
+        "rdau:placeOfPublication.en": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
             }
           }
+        },
+        "rdau:placeOfPublication.fr": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
+        },
+        "rdau:placeOfPublication.it": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
+        },
+        "rdau:publicationStatement.de": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "rdau:publicationStatement.en": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "rdau:publicationStatement.fr": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "rdau:publicationStatement.it": {
+          "index": "not_analyzed",
+          "type": "string"
         },
         "rdfs:isDefinedBy": {
           "properties": {
