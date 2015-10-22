@@ -174,17 +174,58 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
               "index": "not_analyzed",
               "type": "string"
             }
-          },
-          "type": "object"
+          }
         },
-        "dct:contributor": {
+        "dc:contributor": {
           "properties": {
-            "@id": {
-              "index": "not_analyzed",
-              "type": "string"
+            "foaf:Organization": {
+              "properties": {
+                "@id": {
+                  "type": "string",
+                  "index": "not_analyzed"
+                },
+                "rdfs:label": {
+                  "type": "string",
+                  "index": "not_analyzed"
+                }
+              }
+            },
+            "foaf:Person": {
+              "@id": {
+                "index": "not_analyzed",
+                "type": "string"
+              },
+              "dbp:birthYear": {
+                "index": "not_analyzed",
+                "type": "string"
+              },
+              "dbp:deathYear": {
+                "index": "not_analyzed",
+                "type": "string"
+              },
+              "foaf:firstName": {
+                "index": "not_analyzed",
+                "type": "string"
+              },
+              "foaf:lastName": {
+                "index": "not_analyzed",
+                "type": "string"
+              },
+              "foaf:name": {
+                "index": "not_analyzed",
+                "type": "string"
+              },
+              "rdfs:label": {
+                "index": "not_analyzed",
+                "type": "string"
+              },
+              "skos:note": {
+                "index": "analyzed",
+                "type": "string",
+                "analyzer": "text_folded"
+              }
             }
-          },
-          "type": "object"
+          }
         },
         "dc:format": {
           "index": "analyzed",
@@ -215,11 +256,10 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
               "index": "not_analyzed",
               "type": "string"
             }
-          },
-          "type": "object"
+          }
         },
         "dct:issued": {
-          "index": "analyzed",
+          "index": "not_analyzed",
           "type": "string"
         },
         "dct:language": {
@@ -237,8 +277,7 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
               "index": "not_analyzed",
               "type": "string"
             }
-          },
-          "type": "object"
+          }
         },
         "dct:title": {
           "fields": {
@@ -426,6 +465,14 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
           "index": "not_analyzed",
           "type": "string"
         },
+        "rdf:type": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
+        },
         "rdfs:isDefinedBy": {
           "properties": {
             "@id": {
@@ -433,8 +480,7 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
               "index": "analyzed",
               "type": "string"
             }
-          },
-          "type": "object"
+          }
         }
       }
     },
@@ -446,12 +492,8 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
           "type": "string"
         },
         "dct:contributor": {
-          "properties": {
-            "@id": {
-              "index": "not_analyzed",
-              "type": "string"
-            }
-          }
+          "index": "not_analyzed",
+          "type": "string"
         },
         "dct:issued": {
           "properties": {
@@ -462,8 +504,7 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
               "format": "dateOptionalTime",
               "type": "date"
             }
-          },
-          "type": "object"
+          }
         },
         "dct:modified": {
           "properties": {
@@ -474,8 +515,7 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
               "format": "dateOptionalTime",
               "type": "date"
             }
-          },
-          "type": "object"
+          }
         },
         "foaf:primaryTopic": {
           "properties": {
@@ -483,8 +523,7 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
               "index": "not_analyzed",
               "type": "string"
             }
-          },
-          "type": "object"
+          }
         }
       }
     },
@@ -500,47 +539,37 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
         },
         "foaf:firstName": {
           "index": "analyzed",
-          "type": "string"
+          "type": "string",
+          "analyzer": "autocomplete"
         },
         "foaf:lastName": {
           "index": "analyzed",
-          "type": "string"
+          "type": "string",
+          "analyzer": "autocomplete"
         },
         "foaf:name": {
           "index": "analyzed",
-          "type": "string"
+          "type": "string",
+          "analyzer": "autocomplete"
         },
         "rdfs:label": {
           "index": "analyzed",
-          "type": "string"
+          "type": "string",
+          "analyzer": "autocomplete"
         },
         "skos:note": {
           "index": "analyzed",
-          "type": "string"
+          "type": "string",
+          "analyzer": "autocomplete"
         }
       }
     },
-    "organization": {
+    "organisation": {
       "properties": {
         "rdfs:label": {
-          "properties": {
-            "de": {
-              "index": "analyzed",
-              "type": "string"
-            },
-            "fr": {
-              "index": "analyzed",
-              "type": "string"
-            },
-            "it": {
-              "index": "analyzed",
-              "type": "string"
-            },
-            "en": {
-              "index": "analyzed",
-              "type": "string"
-            }
-          }
+          "index": "analyzed",
+          "type": "string",
+          "analyzer": "autocomplete"
         },
         "dbp:isil": {
           "index": "not_analyzed",
@@ -622,16 +651,16 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
         }
       }
     },
-    // "bf:HeldItem": {
-    // Todo: Implement rdf:about, bf:holdingFor, collectItemValues, bibo:locator, bibo:owner; maybe others
-    // Todo: Don't forget XML labels!
-    // },
     "work": {
       "properties": {
         "dct:contributor": {
-          "analyzer": "autocomplete",
-          "index": "analyzed",
-          "type": "string"
+          "properties": {
+            "@id": {
+              "analyzer": "autocomplete",
+              "index": "analyzed",
+              "type": "string"
+            }
+          }
         },
         "bf:hasInstance": {
           "properties": {
@@ -647,5 +676,9 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
         }
       }
     }
+    // "bf:HeldItem": {
+    // Todo: Implement rdf:about, bf:holdingFor, collectItemValues, bibo:locator, bibo:owner; maybe others
+    // Todo: Don't forget XML labels!
+    // },
   }
 }
