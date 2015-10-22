@@ -191,38 +191,40 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
               }
             },
             "foaf:Person": {
-              "@id": {
-                "index": "not_analyzed",
-                "type": "string"
-              },
-              "dbp:birthYear": {
-                "index": "not_analyzed",
-                "type": "string"
-              },
-              "dbp:deathYear": {
-                "index": "not_analyzed",
-                "type": "string"
-              },
-              "foaf:firstName": {
-                "index": "not_analyzed",
-                "type": "string"
-              },
-              "foaf:lastName": {
-                "index": "not_analyzed",
-                "type": "string"
-              },
-              "foaf:name": {
-                "index": "not_analyzed",
-                "type": "string"
-              },
-              "rdfs:label": {
-                "index": "not_analyzed",
-                "type": "string"
-              },
-              "skos:note": {
-                "index": "analyzed",
-                "type": "string",
-                "analyzer": "text_folded"
+              "properties": {
+                "@id": {
+                  "index": "not_analyzed",
+                  "type": "string"
+                },
+                "dbp:birthYear": {
+                  "index": "not_analyzed",
+                  "type": "string"
+                },
+                "dbp:deathYear": {
+                  "index": "not_analyzed",
+                  "type": "string"
+                },
+                "foaf:firstName": {
+                  "index": "not_analyzed",
+                  "type": "string"
+                },
+                "foaf:lastName": {
+                  "index": "not_analyzed",
+                  "type": "string"
+                },
+                "foaf:name": {
+                  "index": "not_analyzed",
+                  "type": "string"
+                },
+                "rdfs:label": {
+                  "index": "not_analyzed",
+                  "type": "string"
+                },
+                "skos:note": {
+                  "index": "analyzed",
+                  "type": "string",
+                  "analyzer": "text_folded"
+                }
               }
             }
           }
