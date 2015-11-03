@@ -13,8 +13,8 @@ __email__ = 'sebastian.schuepbach@unibas.ch'
 __status__ = 'development'
 
 """
-Counts identifiers in Bulk API compliant gzipped JSON documents and collects them in a file named identifiers.csv. Takes
-one argument, the path to the directory where the files are stored.
+Counts identifiers in Bulk API compliant gzipped JSON documents and collects them in a file named identifiers.csv.gz.
+Takes one argument, the path to the directory where the files are stored.
 """
 
 
@@ -26,8 +26,7 @@ def addvalue(v, d):
 
 
 dirname = str(sys.argv[1]) if len(sys.argv) > 1 else os.path.dirname(os.path.realpath("__file__"))
-p1 = re.compile(b'"_id":"(.*)"')
-p2 = re.compile(b'"_type":"(.*)"')
+p1 = re.compile(b'"_id":"(.*?)"')
 words = dict()
 
 print("Creating file list")
@@ -44,11 +43,10 @@ for f in filelist:
     print(fileno + "Handling " + f)
     with gzip.open(f) as file:
         for line in file:
-            if p1.search(line) and p2.search(line):
-                addvalue(p2.search(line).group(1).decode("utf-8") + '/' +
-                         p1.search(line).group(1).decode("utf-8"), words)
+            if p1.search(line):
+                addvalue(p1.search(line).group(1).decode("utf-8"), words)
 
-with open('identifiers.csv', 'w') as file:
+with gzip.open('identifiers.csv.gz', 'wb') as file:
     print("Sorting and writing " + str(len(words)) + " keys")
     for k in sorted(words):
-        file.write(k + ',' + str(words[k]) + '\n')
+        file.write(str.encode(k + ',' + str(words[k]) + '\n'))
