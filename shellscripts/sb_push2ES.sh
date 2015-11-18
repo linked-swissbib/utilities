@@ -20,9 +20,6 @@ function usage()
  printf "usage: $0 -o[BASEDIR json files] -u[url index server] -l[base dir log]"
  echo ""
 
- printf "Example on localhost: ./sb_push2ES.sh -o/swissbib_index/linkedProcessing/linkedTestOutput -ulocalhost:8080/_bulk -l/swissbib_index/linkedProcessing/log"
- echo ""
-
 }
 
 function setTimestamp()
@@ -88,7 +85,7 @@ function push2ES ()
 
             printf "starting to push file <%s> to ES \n\n" ${DOCS_BASEDIR_OUTPUT}/${subdir}/${jsonFile} >> ${LOGFILE_CURL}
 
-            curl -XPOST ${URLINDEXSERVER} --data-binary @${DOCS_BASEDIR_OUTPUT}/${subdir}/${jsonFile} >> ${LOGFILE_CURL} 2>&1
+            curl -s -XPOST ${URLINDEXSERVER}/_bulk --data-binary @${DOCS_BASEDIR_OUTPUT}/${subdir}/${jsonFile} >> ${LOGFILE_CURL} 2>&1
 
             echo "\n\n" >> ${LOGFILE_CURL}
 
