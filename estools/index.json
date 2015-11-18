@@ -2,7 +2,6 @@
 WARNING: File is not compliant with the JSON standard - remove comments before indexing!
 */
 
-
 {
   "settings": {
     "analysis": {
@@ -291,7 +290,7 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
           "index": "analyzed",
           "type": "string"
         },
-        "rdau:contentType.de": {
+        "rdau:contentType": {
           "properties": {
             "@id": {
               "index": "not_analyzed",
@@ -299,7 +298,7 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
             }
           }
         },
-        "rdau:contentType.en": {
+        "rdau:mediaType": {
           "properties": {
             "@id": {
               "index": "not_analyzed",
@@ -307,71 +306,11 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
             }
           }
         },
-        "rdau:contentType.fr": {
-          "properties": {
-            "@id": {
-              "index": "not_analyzed",
-              "type": "string"
-            }
-          }
-        },
-        "rdau:contentType.it": {
-          "properties": {
-            "@id": {
-              "index": "not_analyzed",
-              "type": "string"
-            }
-          }
-        },
-        "rdau:mediaType.de": {
-          "properties": {
-            "@id": {
-              "index": "not_analyzed",
-              "type": "string"
-            }
-          }
-        },
-        "rdau:mediaType.en": {
-          "properties": {
-            "@id": {
-              "index": "not_analyzed",
-              "type": "string"
-            }
-          }
-        },
-        "rdau:mediaType.fr": {
-          "properties": {
-            "@id": {
-              "index": "not_analyzed",
-              "type": "string"
-            }
-          }
-        },
-        "rdau:mediaType.it": {
-          "properties": {
-            "@id": {
-              "index": "not_analyzed",
-              "type": "string"
-            }
-          }
-        },
-        "rdau:dissertationOrThesisInformation.de": {
+        "rdau:dissertationOrThesisInformation": {
           "index": "analyzed",
           "type": "string"
         },
-        "rdau:dissertationOrThesisInformation.en": {
-          "index": "analyzed",
-          "type": "string"
-        },
-        "rdau:dissertationOrThesisInformation.fr": {
-          "index": "analyzed",
-          "type": "string"
-        },
-        "rdau:dissertationOrThesisInformation.it": {
-          "index": "analyzed",
-          "type": "string"
-        },
-        "rdau:modeOfIssuance.de": {
+        "rdau:modeOfIssuance": {
           "properties": {
             "@id": {
               "index": "not_analyzed",
@@ -379,47 +318,11 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
             }
           }
         },
-        "rdau:modeOfIssuance.en": {
-          "properties": {
-            "@id": {
-              "index": "not_analyzed",
-              "type": "string"
-            }
-          }
-        },
-        "rdau:modeOfIssuance.fr": {
-          "properties": {
-            "@id": {
-              "index": "not_analyzed",
-              "type": "string"
-            }
-          }
-        },
-        "rdau:modeOfIssuance.it": {
-          "properties": {
-            "@id": {
-              "index": "not_analyzed",
-              "type": "string"
-            }
-          }
-        },
-        "rdau:noteOnResource.de": {
+        "rdau:noteOnResource": {
           "index": "not_analyzed",
           "type": "string"
         },
-        "rdau:noteOnResource.en": {
-          "index": "not_analyzed",
-          "type": "string"
-        },
-        "rdau:noteOnResource.fr": {
-          "index": "not_analyzed",
-          "type": "string"
-        },
-        "rdau:noteOnResource.it": {
-          "index": "not_analyzed",
-          "type": "string"
-        },
-        "rdau:placeOfPublication.de": {
+        "rdau:placeOfPublication": {
           "properties": {
             "@id": {
               "index": "not_analyzed",
@@ -427,43 +330,7 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
             }
           }
         },
-        "rdau:placeOfPublication.en": {
-          "properties": {
-            "@id": {
-              "index": "not_analyzed",
-              "type": "string"
-            }
-          }
-        },
-        "rdau:placeOfPublication.fr": {
-          "properties": {
-            "@id": {
-              "index": "not_analyzed",
-              "type": "string"
-            }
-          }
-        },
-        "rdau:placeOfPublication.it": {
-          "properties": {
-            "@id": {
-              "index": "not_analyzed",
-              "type": "string"
-            }
-          }
-        },
-        "rdau:publicationStatement.de": {
-          "index": "not_analyzed",
-          "type": "string"
-        },
-        "rdau:publicationStatement.en": {
-          "index": "not_analyzed",
-          "type": "string"
-        },
-        "rdau:publicationStatement.fr": {
-          "index": "not_analyzed",
-          "type": "string"
-        },
-        "rdau:publicationStatement.it": {
+        "rdau:publicationStatement": {
           "index": "not_analyzed",
           "type": "string"
         },
@@ -673,8 +540,80 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
           }
         },
         "dct:title": {
-          "index": "not_analyzed",
+          "fields": {
+            "folded": {
+              "analyzer": "text_folded",
+              "type": "string"
+            }
+          },
+          "index": "analyzed",
           "type": "string"
+        }
+      }
+    },
+    "viaf": {
+      "properties": {
+        "rdf:value": {
+          "properties": {
+            "@type": {
+              "type": "string"
+            },
+            "@value": {
+              "type": "string"
+            }
+          }
+        },
+        "schema:alternateName": {
+          "properties": {
+            "@type": {
+              "type": "string"
+            }
+          }
+        },
+        "schema:birthDate": {
+          "properties": {
+            "@value": {
+              "type": "string"
+            }
+          }
+        },
+        "schema:deathDate": {
+          "properties": {
+            "@value": {
+              "type": "string"
+            }
+          }
+        },
+        "schema:description": {
+          "properties": {
+            "@value": {
+              "type": "string"
+            }
+          }
+        },
+        "schema:familyName": {
+          "properties": {
+            "@value": {
+              "type": "string"
+            }
+          }
+        },
+        "schema:givenName": {
+          "properties": {
+            "@value": {
+              "type": "string"
+            }
+          }
+        },
+        "schema:name": {
+          "properties": {
+            "@language": {
+              "type": "string"
+            },
+            "@value": {
+              "type": "string"
+            }
+          }
         }
       }
     }
