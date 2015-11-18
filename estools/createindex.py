@@ -8,7 +8,7 @@ __status__ = 'development'
 
 
 from jsmin import jsmin
-from elasticsearch import Elasticsearch, client
+from elasticsearch import Elasticsearch
 import argparse
 
 
@@ -21,4 +21,4 @@ args = p.parse_args()
 body = jsmin(args.ifile.read())
 
 es = Elasticsearch([args.node])
-client.IndicesClient(es).create(index=args.index, body=body)
+es.indices.create(index=args.index, body=body)
