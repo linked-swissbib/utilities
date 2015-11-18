@@ -16,7 +16,6 @@ from http import client
 import argparse
 import os
 from datetime import datetime
-import gzip
 #don't forget to install dependency rdflib-jsonld (serializer plugin for jsonld)
 
 
@@ -37,7 +36,8 @@ class Rdfxml2Es:
         :param indctrl: Settings and mapping for ES
         :param bulksize: Size of bulk uploads
         :param devmode: Number of samples for performing performance
-        :param outfile: File output instead of indexing
+        :param filemode:
+        :param outsubDir:
         test on different bulk upload sizes
         :return: None
         """
@@ -149,8 +149,6 @@ class Rdfxml2Es:
 
             for outer in self.esdocs:
                 for inner in outer:
-                    # pp = PrettyPrinter(indent=0, width=100000, stream=self.of, compact=True)
-                    # pp.pprint(inner)
                     #self.of.write(dumps(inner, separators='\n'))
                     #we need this json dump method because the content is stored in a dictionary structure - as far as I understand it
                     #so we can't just write a string
@@ -167,28 +165,26 @@ class Rdfxml2Es:
                 self.writtenDocuments = 0
                 self._openFile()
 
-
-
         elif self.bulknum >= self.bulksize:
             # Perform bulk upload
             helpers.bulk(client=self.of, actions=self.esdocs, stats_only=True)
-            # Reset counter and list
+            # Reset counter and empty list
             self.bulknum = 0
             del self.esdocs[:]
 
-    def _openFile (self):
+    def _openFile(self):
 
         subDir = self.outsubDir + os.sep + self.currentSubDir.__str__()
 
-        if not os.path.isdir (subDir):
+        if not os.path.isdir(subDir):
             os.mkdir(subDir)
         #every time the script is started, the number of current subdirs is again 1 so we neeed to check
         #hown much files are already stored in the current subdir
         elif self.openedFilesInSubDir >= self.numberOfFilesInSubDir or len([name for name in os.listdir(subDir)]) \
-                >= self.numberOfFilesInSubDir :
-            self.currentSubDir +=  1
+                >= self.numberOfFilesInSubDir:
+            self.currentSubDir += 1
             subDir = self.outsubDir + os.sep + self.currentSubDir.__str__()
-            if not os.path.isdir (subDir):
+            if not os.path.isdir(subDir):
                 os.mkdir(subDir)
             self.numberOfFilesInSubDir = 0
 
@@ -211,6 +207,7 @@ class Rdfxml2Es:
             self.of.close()
             os.system("gzip " + name)
         self.of = None
+
 
 class OneLineXML(Rdfxml2Es):
 
@@ -325,4 +322,3 @@ if __name__ == '__main__':
               "{0:.2f}".format(round((time() - start_time), 2)), 'seconds')
     else:
         obj.parsexml()
-

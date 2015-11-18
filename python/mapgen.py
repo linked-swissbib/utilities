@@ -94,7 +94,7 @@ def gendocu(stream, estype='document'):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Creates the mapping for Elasticsearch")
-    # parser.add_argument('type', metavar='<name>', type=str, help='Name of ES type')
+    # p.add_argument('type', metavar='<name>', type=str, help='Name of ES type')
     parser.add_argument('outputfile', metavar='<file>', type=str, help='Output file')
     args = parser.parse_args()
 
