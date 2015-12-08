@@ -421,6 +421,10 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
           "type": "string",
           "analyzer": "autocomplete"
         },
+        "owl:sameAs": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
         "rdfs:label": {
           "index": "analyzed",
           "type": "string",
@@ -553,6 +557,20 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
     },
     "viaf": {
       "properties": {
+        "dc:identifier": {
+          "properties" : {
+              "@value" : {
+                "type" : "string"
+              }
+            }
+        },
+        "owl:differentFrom": {
+          "properties": {
+            "@value": {
+              "type": "string"
+            }
+          }
+        },
         "rdf:value": {
           "properties": {
             "@type": {
@@ -566,6 +584,9 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
         "schema:alternateName": {
           "properties": {
             "@type": {
+              "type": "string"
+            },
+            "@value": {
               "type": "string"
             }
           }
