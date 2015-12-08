@@ -290,7 +290,8 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
           "index": "analyzed",
           "type": "string"
         },
-        "rdau:contentType": {
+        // rdau:contentType.en
+        "rdau:P60049": {
           "properties": {
             "@id": {
               "index": "not_analyzed",
@@ -298,7 +299,8 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
             }
           }
         },
-        "rdau:mediaType": {
+        //rdau:mediaType
+        "rdau:P60050": {
           "properties": {
             "@id": {
               "index": "not_analyzed",
@@ -306,11 +308,13 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
             }
           }
         },
-        "rdau:dissertationOrThesisInformation": {
+        //rdau:dissertationOrThesisInformation
+        "rdau:P60489": {
           "index": "analyzed",
           "type": "string"
         },
-        "rdau:modeOfIssuance": {
+        //rdau:modeOfIssuance
+        "rdau:P60051": {
           "properties": {
             "@id": {
               "index": "not_analyzed",
@@ -318,11 +322,13 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
             }
           }
         },
-        "rdau:noteOnResource": {
+        //rdau:noteOnResource
+        "rdau:P60470": {
           "index": "not_analyzed",
           "type": "string"
         },
-        "rdau:placeOfPublication": {
+        //rdau:placeOfPublication
+        "rdau:P60163": {
           "properties": {
             "@id": {
               "index": "not_analyzed",
@@ -330,7 +336,8 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
             }
           }
         },
-        "rdau:publicationStatement": {
+        //rdau:publicationStatement
+        "rdau:P60333": {
           "index": "not_analyzed",
           "type": "string"
         },
