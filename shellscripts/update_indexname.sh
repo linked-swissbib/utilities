@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 #######################################################################
 # Title: 	update_indexname
@@ -9,7 +9,7 @@
 # Author: 	Sebastian Schüpbach (sebastian.schuepbach@unibas.ch)
 #######################################################################
 
-for f in *.jsonld.gz
+for f in $(find -type f -name "*.jsonld.gz")
 do
 	gunzip $f
 	# sed -in 's/"_index":"$1"/"_index":"$2"/g' ${f:0:-3}
