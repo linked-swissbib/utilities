@@ -441,6 +441,203 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
           "index": "analyzed",
           "type": "string",
           "analyzer": "autocomplete"
+        },
+        "dbp:abstract": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "dbp:birthPlace": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
+        },
+        "dbp:deathPlace": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
+        },
+        "dbp:genre": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
+        },
+        "dbp:movement": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
+        },
+        "dbp:nationality": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
+        },
+        "dbp:notableWork": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
+        },
+        "dbp:occupation": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
+        },
+        "dbp:thumbnail": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
+        },
+        "dbp:influencedBy": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
+        },
+        "dbp:partner": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
+        },
+        "dbp:pseudonym": {
+          "index": "analyzed",
+          "type": "string",
+          "analyzer": "autocomplete"
+        },
+        "dbp:spouse": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
+        },
+        "dbp:alternativeNames": {
+          "index": "analyzed",
+          "type": "string",
+          "analyzer": "autocomplete"
+        },
+        "dbp:author": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
+        },
+        "dbp:influenced": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
+        },
+        "dc:identifier": {
+          "properties": {
+            "@value": {
+              "type": "string"
+            }
+          }
+        },
+        "owl:differentFrom": {
+          "properties": {
+            "@value": {
+              "type": "string"
+            }
+          }
+        },
+        "rdf:value": {
+          "properties": {
+            "@type": {
+              "type": "string"
+            },
+            "@value": {
+              "type": "string"
+            }
+          }
+        },
+        "schema:alternateName": {
+          "properties": {
+            "@type": {
+              "type": "string"
+            },
+            "@value": {
+              "type": "string"
+            }
+          }
+        },
+        "schema:birthDate": {
+          "properties": {
+            "@value": {
+              "type": "string"
+            }
+          }
+        },
+        "schema:deathDate": {
+          "properties": {
+            "@value": {
+              "type": "string"
+            }
+          }
+        },
+        "schema:description": {
+          "properties": {
+            "@value": {
+              "type": "string"
+            }
+          }
+        },
+        "schema:familyName": {
+          "properties": {
+            "@value": {
+              "type": "string"
+            }
+          }
+        },
+        "schema:givenName": {
+          "properties": {
+            "@value": {
+              "type": "string"
+            }
+          }
+        },
+        "schema:name": {
+          "properties": {
+            "@language": {
+              "type": "string"
+            },
+            "@value": {
+              "type": "string"
+            }
+          }
         }
       }
     },
@@ -559,89 +756,6 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
           },
           "index": "analyzed",
           "type": "string"
-        }
-      }
-    },
-    "viaf": {
-      "properties": {
-        "dc:identifier": {
-          "properties" : {
-              "@value" : {
-                "type" : "string"
-              }
-            }
-        },
-        "owl:differentFrom": {
-          "properties": {
-            "@value": {
-              "type": "string"
-            }
-          }
-        },
-        "rdf:value": {
-          "properties": {
-            "@type": {
-              "type": "string"
-            },
-            "@value": {
-              "type": "string"
-            }
-          }
-        },
-        "schema:alternateName": {
-          "properties": {
-            "@type": {
-              "type": "string"
-            },
-            "@value": {
-              "type": "string"
-            }
-          }
-        },
-        "schema:birthDate": {
-          "properties": {
-            "@value": {
-              "type": "string"
-            }
-          }
-        },
-        "schema:deathDate": {
-          "properties": {
-            "@value": {
-              "type": "string"
-            }
-          }
-        },
-        "schema:description": {
-          "properties": {
-            "@value": {
-              "type": "string"
-            }
-          }
-        },
-        "schema:familyName": {
-          "properties": {
-            "@value": {
-              "type": "string"
-            }
-          }
-        },
-        "schema:givenName": {
-          "properties": {
-            "@value": {
-              "type": "string"
-            }
-          }
-        },
-        "schema:name": {
-          "properties": {
-            "@language": {
-              "type": "string"
-            },
-            "@value": {
-              "type": "string"
-            }
-          }
         }
       }
     }
