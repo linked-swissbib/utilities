@@ -733,8 +733,7 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
         "dct:contributor": {
           "properties": {
             "@id": {
-              "analyzer": "autocomplete",
-              "index": "analyzed",
+              "index": "not_analyzed",
               "type": "string"
             }
           }
@@ -758,10 +757,44 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
           "type": "string"
         }
       }
+    },
+    "item": {
+      "properties": {
+        "bf:holdingFor": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
+        },
+        "foaf:page": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
+        },
+        "bibo:locator": {
+          "analyzer": "autocomplete",
+          "index": "analyzed",
+          "type": "string"
+        },
+        "bibo:owner": {
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
+        },
+        "bf:subLocation": {
+          "analyzer": "autocomplete",
+          "index": "analyzed",
+          "type": "string"
+        }
+      }
     }
-    // "bf:HeldItem": {
-    // Todo: Implement rdf:about, bf:holdingFor, collectItemValues, bibo:locator, bibo:owner; maybe others
-    // Todo: Don't forget XML labels!
-    // },
   }
 }

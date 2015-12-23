@@ -1,0 +1,7 @@
+{
+  "@context": {
+    "bf": "http://bibframe.org/vocab/",
+    "bibo": "http://purl.org/ontology/bibo/",
+    "foaf": "http://xmlns.com/foaf/0.1/"
+  }
+}
