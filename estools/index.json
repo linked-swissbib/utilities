@@ -51,85 +51,8 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
       "dynamic": "strict",
       "properties": {
         "@context": {
-          "properties": {
-            "bf": {
-              "index": "no",
-              "type": "string"
-            },
-            "bibo": {
-              "index": "no",
-              "type": "string"
-            },
-            "dbp": {
-              "index": "no",
-              "type": "string"
-            },
-            "dc": {
-              "index": "no",
-              "type": "string"
-            },
-            "dct": {
-              "index": "no",
-              "type": "string"
-            },
-            "foaf": {
-              "index": "no",
-              "type": "string"
-            },
-            "gnd": {
-              "index": "no",
-              "type": "string"
-            },
-            "owl": {
-              "index": "no",
-              "type": "string"
-            },
-            "rdac": {
-              "index": "no",
-              "type": "string"
-            },
-            "rdai": {
-              "index": "no",
-              "type": "string"
-            },
-            "rdam": {
-              "index": "no",
-              "type": "string"
-            },
-            "rdau": {
-              "index": "no",
-              "type": "string"
-            },
-            "rdaw": {
-              "index": "no",
-              "type": "string"
-            },
-            "rdf": {
-              "index": "no",
-              "type": "string"
-            },
-            "rdfs": {
-              "index": "no",
-              "type": "string"
-            },
-            "schema": {
-              "index": "no",
-              "type": "string"
-            },
-            "skos": {
-              "index": "no",
-              "type": "string"
-            },
-            "void": {
-              "index": "no",
-              "type": "string"
-            },
-            "xsd": {
-              "index": "no",
-              "type": "string"
-            }
-          },
-          "type": "object"
+          "index": "not_analyzed",
+          "type": "string"
         },
         "@id": {
           "index": "not_analyzed",
