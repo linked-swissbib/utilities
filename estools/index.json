@@ -323,6 +323,10 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
               "type": "string"
             }
           }
+        },
+        "bf:local": {
+          "index": "not_analyzed",
+          "type": "string"
         }
       }
     },
