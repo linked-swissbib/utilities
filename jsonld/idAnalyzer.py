@@ -12,7 +12,7 @@ __email__ = 'sebastian.schuepbach@unibas.ch'
 __status__ = 'development'
 
 """
-Counts numbers of identifiers in a file created by idAnalyzer. Takes one argument, the path to the file.
+Counts numbers of identifiers in a file created by idCounter.py. Takes one argument, the path to the file.
 """
 
 
