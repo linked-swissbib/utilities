@@ -264,6 +264,11 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
           "index": "not_analyzed",
           "type": "string"
         },
+        //rdau:statementOfResponsibility
+        "rdau:P60339": {
+          "index": "analyzed",
+          "type": "string"
+        },
         "rdf:type": {
           "properties": {
             "@id": {
