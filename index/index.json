@@ -69,13 +69,11 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
         "bf:instanceOf": {
           "properties": {
             "@id": {
-              "index": "analyzed",
               "type": "string"
             }
           }
         },
         "bibo:edition": {
-          "index": "analyzed",
           "type": "string"
         },
         "bibo:isbn10": {
@@ -143,7 +141,6 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
                   "type": "string"
                 },
                 "skos:note": {
-                  "index": "analyzed",
                   "type": "string",
                   "analyzer": "text_folded"
                 }
@@ -152,7 +149,6 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
           }
         },
         "dc:format": {
-          "index": "analyzed",
           "type": "string"
         },
         "dct:alternative": {
@@ -162,16 +158,12 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
               "type": "string"
             }
           },
-          "index": "analyzed",
           "type": "string"
         },
         "dct:bibliographicCitation": {
-          "analyzer": "standard",
-          "index": "analyzed",
           "type": "string"
         },
         "dct:hasPart": {
-          "index": "analyzed",
           "type": "string"
         },
         "dct:isPartOf": {
@@ -192,8 +184,7 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
               "index": "not_analyzed",
               "type": "string"
             }
-          },
-          "type": "object"
+          }
         },
         "dct:subject": {
           "properties": {
@@ -210,7 +201,6 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
               "type": "string"
             }
           },
-          "index": "analyzed",
           "type": "string"
         },
         // rdau:contentType.en
@@ -222,7 +212,7 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
             }
           }
         },
-        //rdau:mediaType
+        //rdau:mediaType.en
         "rdau:P60050": {
           "properties": {
             "@id": {
@@ -231,12 +221,11 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
             }
           }
         },
-        //rdau:dissertationOrThesisInformation
+        //rdau:dissertationOrThesisInformation.en
         "rdau:P60489": {
-          "index": "analyzed",
           "type": "string"
         },
-        //rdau:modeOfIssuance
+        //rdau:modeOfIssuance.en
         "rdau:P60051": {
           "properties": {
             "@id": {
@@ -245,12 +234,12 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
             }
           }
         },
-        //rdau:noteOnResource
+        //rdau:noteOnResource.en
         "rdau:P60470": {
           "index": "not_analyzed",
           "type": "string"
         },
-        //rdau:placeOfPublication
+        //rdau:placeOfPublication.en
         "rdau:P60163": {
           "properties": {
             "@id": {
@@ -259,14 +248,13 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
             }
           }
         },
-        //rdau:publicationStatement
+        //rdau:publicationStatement.en
         "rdau:P60333": {
           "index": "not_analyzed",
           "type": "string"
         },
         //rdau:statementOfResponsibility
         "rdau:P60339": {
-          "index": "analyzed",
           "type": "string"
         },
         "rdf:type": {
@@ -281,7 +269,6 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
           "properties": {
             "@id": {
               "analyzer": "extr_id",
-              "index": "analyzed",
               "type": "string"
             }
           }
@@ -292,12 +279,15 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
       "properties": {
         "dc:contributor": {
           "analyzer": "autocomplete",
-          "index": "analyzed",
           "type": "string"
         },
         "dct:contributor": {
-          "index": "not_analyzed",
-          "type": "string"
+          "properties": {
+            "@id": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
         },
         "dct:issued": {
           "properties": {
@@ -339,24 +329,23 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
       "properties": {
         "dbp:birthYear": {
           "index": "not_analyzed",
-          "type": "string"
+          "type": "date",
+          "format": "year"
         },
         "dbp:deathYear": {
           "index": "not_analyzed",
-          "type": "string"
+          "type": "date",
+          "format": "year"
         },
         "foaf:firstName": {
-          "index": "analyzed",
           "type": "string",
           "analyzer": "autocomplete"
         },
         "foaf:lastName": {
-          "index": "analyzed",
           "type": "string",
           "analyzer": "autocomplete"
         },
         "foaf:name": {
-          "index": "analyzed",
           "type": "string",
           "analyzer": "autocomplete"
         },
@@ -365,12 +354,10 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
           "type": "string"
         },
         "rdfs:label": {
-          "index": "analyzed",
           "type": "string",
           "analyzer": "autocomplete"
         },
         "skos:note": {
-          "index": "analyzed",
           "type": "string",
           "analyzer": "autocomplete"
         },
@@ -459,7 +446,6 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
           }
         },
         "dbp:pseudonym": {
-          "index": "analyzed",
           "type": "string",
           "analyzer": "autocomplete"
         },
@@ -472,7 +458,6 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
           }
         },
         "dbp:alternativeNames": {
-          "index": "analyzed",
           "type": "string",
           "analyzer": "autocomplete"
         },
@@ -576,7 +561,6 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
     "organisation": {
       "properties": {
         "rdfs:label": {
-          "index": "analyzed",
           "type": "string",
           "analyzer": "autocomplete"
         },
@@ -587,19 +571,15 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
         "foaf:name": {
           "properties": {
             "de": {
-              "index": "analyzed",
               "type": "string"
             },
             "fr": {
-              "index": "analyzed",
               "type": "string"
             },
             "it": {
-              "index": "analyzed",
               "type": "string"
             },
             "en": {
-              "index": "analyzed",
               "type": "string"
             }
           }
@@ -635,15 +615,12 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
             "vcard:Address": {
               "properties": {
                 "vcard:street-address": {
-                  "index": "analyzed",
                   "type": "string"
                 },
                 "vcard:postal-code": {
-                  "index": "analyzed",
                   "type": "string"
                 },
                 "vcard:locality": {
-                  "index": "analyzed",
                   "type": "string"
                 },
                 "vcard:hasRegion": {
@@ -685,7 +662,6 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
               "type": "string"
             }
           },
-          "index": "analyzed",
           "type": "string"
         }
       }
@@ -710,7 +686,6 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
         },
         "bibo:locator": {
           "analyzer": "autocomplete",
-          "index": "analyzed",
           "type": "string"
         },
         "bibo:owner": {
@@ -723,7 +698,6 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
         },
         "bf:subLocation": {
           "analyzer": "autocomplete",
-          "index": "analyzed",
           "type": "string"
         }
       }
