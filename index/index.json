@@ -118,11 +118,11 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
                 },
                 "dbp:birthYear": {
                   "index": "not_analyzed",
-                  "type": "string"
+                  "type": "date"
                 },
                 "dbp:deathYear": {
                   "index": "not_analyzed",
-                  "type": "string"
+                  "type": "date"
                 },
                 "foaf:firstName": {
                   "index": "not_analyzed",
@@ -137,7 +137,7 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
                   "type": "string"
                 },
                 "rdfs:label": {
-                  "index": "not_analyzed",
+                  "analyzer": "autocomplete",
                   "type": "string"
                 },
                 "skos:note": {
