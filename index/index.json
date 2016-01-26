@@ -96,7 +96,7 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
             }
           }
         },
-        "dc:contributor": {
+        "dct:contributor": {
           "properties": {
             "foaf:Organization": {
               "properties": {
