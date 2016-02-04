@@ -7,6 +7,27 @@
     "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
     "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
     "schema": "https://schema.org/",
-    "skos": "http://www.w3.org/2004/02/skos/core#"
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "dbp:birthYear": {
+      "@type": "http://www.w3.org/2001/XMLSchema#gYear"
+    },
+    "dbp:deathYear": {
+      "@type": "http://www.w3.org/2001/XMLSchema#gYear"
+    },
+    "schema:birthDate": {
+      "@type": "http://www.w3.org/2001/XMLSchema#gYear"
+    },
+    "schema:deathDate": {
+      "@type": "http://www.w3.org/2001/XMLSchema#gYear"
+    },
+    "dbp:abstract": {
+      "@container": "@language"
+    },
+    "dbp:pseudonym": {
+      "@container": "@language"
+    },
+    "dbp:alternativeNames": {
+      "@container": "@language"
+    }
   }
 }
