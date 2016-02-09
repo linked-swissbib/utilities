@@ -6,6 +6,15 @@
     "foaf": "http://xmlns.com/foaf/0.1/",
     "dct:modified": {
       "@type": "http://www.w3.org/2001/XMLSchema#dateTime"
+    },
+    "dct:issued": {
+      "@type": "http://www.w3.org/2001/XMLSchema#dateTime"
+    },
+    "foaf:primaryTopic": {
+      "@type": "@id"
+    },
+    "dct:contributor": {
+      "@type": "@id"
     }
   }
 }
