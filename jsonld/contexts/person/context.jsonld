@@ -70,6 +70,15 @@
     },
     "owl:differentFrom": {
       "@type": "@id"
+    },
+    "schema:gender": {
+      "@type": "@id"
+    },
+    "schema:sameAs": {
+      "@type": "@id"
+    },
+    "rdf:type": {
+      "@type": "@id"
     }
   }
 }

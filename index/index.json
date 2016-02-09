@@ -341,6 +341,14 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
           "type": "string",
           "analyzer": "autocomplete"
         },
+        "schema:gender": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "schema:sameAs": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
         "schema:name": {
           "properties": {
             "@language": {
@@ -351,6 +359,10 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
               "analyzer": "autocomplete"
             }
           }
+        },
+        "rdf:type": {
+          "index": "not_analyzed",
+          "type": "string"
         }
       }
     },
