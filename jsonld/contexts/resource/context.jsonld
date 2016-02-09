@@ -48,6 +48,12 @@
     },
     "rdfs:isDefinedBy": {
       "@type": "@id"
+    },
+    "foaf:Organization": {
+      "@type": "@id"
+    },
+    "foaf:Person": {
+      "@type": "@id"
     }
   }
 }
