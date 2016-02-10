@@ -77,16 +77,8 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
           "type": "string"
         },
         "dct:contributor": {
-          "properties": {
-            "foaf:Organization": {
-              "type": "string",
-              "index": "not_analyzed"
-            },
-            "foaf:Person": {
-              "index": "not_analyzed",
-              "type": "string"
-            }
-          }
+          "type": "string",
+          "index": "not_analyzed"
         },
         "dc:format": {
           "type": "string"
@@ -310,10 +302,6 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
           "type": "string"
         },
         "owl:differentFrom": {
-          "index": "not_analyzed",
-          "type": "string"
-        },
-        "rdf:value": {
           "index": "not_analyzed",
           "type": "string"
         },
