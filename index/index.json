@@ -234,8 +234,24 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
           "analyzer": "autocomplete"
         },
         "dbp:abstract": {
-          "index": "not_analyzed",
-          "type": "string"
+          "properties": {
+            "de": {
+              "type": "string",
+              "analyzer": "german"
+            },
+            "en": {
+              "type": "string",
+              "analyzer": "english"
+            },
+            "fr": {
+              "type": "string",
+              "analyzer": "french"
+            },
+            "it": {
+              "type": "string",
+              "analyzer": "italian"
+            }
+          }
         },
         "dbp:birthPlace": {
           "index": "not_analyzed",
@@ -338,15 +354,8 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
           "index": "not_analyzed"
         },
         "schema:name": {
-          "properties": {
-            "@language": {
-              "type": "string"
-            },
-            "@value": {
-              "type": "string",
-              "analyzer": "autocomplete"
-            }
-          }
+          "type": "string",
+          "analyzer": "autocomplete"
         },
         "rdf:type": {
           "index": "not_analyzed",
