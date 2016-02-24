@@ -26,8 +26,5 @@
     "dbp:pseudonym": {
       "@container": "@language"
     },
-    "dbp:alternativeNames": {
-      "@container": "@language"
-    }
   }
 }

@@ -436,10 +436,6 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
             }
           }
         },
-        "dbp:alternativeNames": {
-          "type": "string",
-          "analyzer": "autocomplete"
-        },
         "dbp:author": {
           "properties": {
             "@id": {
