@@ -26,9 +26,6 @@
     "dbp:pseudonym": {
       "@container": "@language"
     },
-    "dbp:alternativeNames": {
-      "@container": "@language"
-    },
     "dbp:birthPlace": {
       "@type": "@id"
     },
