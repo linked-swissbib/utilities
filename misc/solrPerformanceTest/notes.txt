@@ -1,0 +1,48 @@
+db.queries.find({solr5QTime: {$exists: true}}).count()
+
+
+db.queries.createIndex( { 'solr5QTime2016-02-10T13523Z': 1 } )
+db.queries.find({'solr5QTime2016-02-16T105326Z': {$exists: true}}).count()
+
+solr5QTime2016-02-16T105326Z
+
+
+db.queries.find( { 'solr5QTime2016-02-16T105326Z': { $gt: 100 } } )
+
+db.queries.find( { 'solr5QTime2016-02-16T105326Z': { $gt: 100 }} )
+
+
+modifiers : {no_cursor_timeout: True}
+
+queries insgesamt:
+101196
+kleiner 100
+96000
+
+
+
+
+grösser 1000
+706
+
+
+
+grösser 5000
+24
+
+grösser 10000
+4
+
+
+$PYTHON_SOLR/python readLogs5x.py -d/usr/local/swissbib/Staff/gh/solrProdLogs > read.logs.log 2>&1 &
+
+
+1) Abfragen insgesamt: 76656
+less than 100 73270
+> 500 511
+> 1000 325
+> 1500 232
+> 2500 197
+> 4000 30
+longest 5724
+

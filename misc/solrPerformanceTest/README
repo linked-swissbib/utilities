@@ -1,0 +1,20 @@
+
+Attention: this is just a quick hack to pick up real user requests found in the logs of the productive Solr servers
+
+principal idea (with two steps):
+A. readLogs5x.py
+- scan the list of logfiles
+- use only the params query part
+- make some transformations on this part for things we don't want or can't use
+(in our case:
+ -- sru.swissbib.ch is Java based and uses the native binary protocols. These are reflected in the logs and we can't make
+http based requests in this test scenamrio
+ -- filter for facet only requests (at the moment harrdcoded)
+
+ - the final request we want to use for our test scenario are stored within schema-less Dcoument storage (in our case MongoDB)
+ This makes it easy to store additional results (querytime and number of hits) even in parallel
+
+
+ B. RunQueryies.py
+ - baed on the stored (MongoDB) requests we can make stress tests against Solr servers (hard-coded!)
+
