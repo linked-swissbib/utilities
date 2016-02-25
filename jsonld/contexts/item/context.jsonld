@@ -2,6 +2,15 @@
   "@context": {
     "bf": "http://bibframe.org/vocab/",
     "bibo": "http://purl.org/ontology/bibo/",
-    "foaf": "http://xmlns.com/foaf/0.1/"
+    "foaf": "http://xmlns.com/foaf/0.1/",
+    "bf:holdingFor": {
+      "@type": "@id"
+    },
+    "foaf:page": {
+      "@type": "@id"
+    },
+    "bibo:owner": {
+      "@type": "@id"
+    }
   }
 }

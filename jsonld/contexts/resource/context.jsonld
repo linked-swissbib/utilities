@@ -15,6 +15,39 @@
     },
     "dbp:deathYear": {
       "@type": "http://www.w3.org/2001/XMLSchema#gYear"
+    },
+    "bf:instanceOf": {
+      "@type": "@id"
+    },
+    "dbp:originalLanguage": {
+      "@type": "@id"
+    },
+    "dct:isPartOf": {
+      "@type": "@id"
+    },
+    "dct:language": {
+      "@type": "@id"
+    },
+    "dct:subject": {
+      "@type": "@id"
+    },
+    "rdau:P60049": {
+      "@type": "@id"
+    },
+    "rdau:P60050": {
+      "@type": "@id"
+    },
+    "rdau:P60051": {
+      "@type": "@id"
+    },
+    "rdau:P60163": {
+      "@type": "@id"
+    },
+    "rdf:type": {
+      "@type": "@id"
+    },
+    "rdfs:isDefinedBy": {
+      "@type": "@id"
     }
   }
 }

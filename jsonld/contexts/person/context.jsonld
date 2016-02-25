@@ -26,5 +26,56 @@
     "dbp:pseudonym": {
       "@container": "@language"
     },
+    "dbp:birthPlace": {
+      "@type": "@id"
+    },
+    "dbp:deathPlace": {
+      "@type": "@id"
+    },
+    "dbp:genre": {
+      "@type": "@id"
+    },
+    "dbp:movement": {
+      "@type": "@id"
+    },
+    "dbp:nationality": {
+      "@type": "@id"
+    },
+    "dbp:notableWork": {
+      "@type": "@id"
+    },
+    "dbp:occupation": {
+      "@type": "@id"
+    },
+    "dbp:thumbnail": {
+      "@type": "@id"
+    },
+    "dbp:influencedBy": {
+      "@type": "@id"
+    },
+    "dbp:partner": {
+      "@type": "@id"
+    },
+    "dbp:spouse": {
+      "@type": "@id"
+    },
+    "dbp:author": {
+      "@type": "@id"
+    },
+    "dbp:influenced": {
+      "@type": "@id"
+    },
+    "owl:differentFrom": {
+      "@type": "@id"
+    },
+    "schema:gender": {
+      "@type": "@id"
+    },
+    "schema:sameAs": {
+      "@type": "@id"
+    },
+    "rdf:type": {
+      "@type": "@id"
+    }
   }
 }

@@ -80,7 +80,7 @@ function transformMarc ()
         BASEFILENAME=`basename ${datei} .gz`
         #echo $BASEFILENAME
         #FILENAME=${BASEFILENAME}.mf.xml
-        python ${SHELLPATH}/../python/transFormMarc2MFMarc.py -i${INPUT_DIR}/${BASEFILENAME} -o${OUTPUT_DIR}/$BASEFILENAME
+        python ${SHELLPATH}/transFormMarc2MFMarc.py -i${INPUT_DIR}/${BASEFILENAME} -o${OUTPUT_DIR}/$BASEFILENAME
 
         gzip ${INPUT_DIR}/${BASEFILENAME}
         gzip ${OUTPUT_DIR}/$BASEFILENAME
