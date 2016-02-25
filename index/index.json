@@ -349,10 +349,6 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
           "index": "not_analyzed",
           "type": "string"
         },
-        "dbp:alternativeNames": {
-          "type": "string",
-          "analyzer": "autocomplete"
-        },
         "dbp:author": {
           "index": "not_analyzed",
           "type": "string"
