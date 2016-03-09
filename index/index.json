@@ -261,6 +261,16 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
           "index": "not_analyzed",
           "type": "string"
         },
+        "dbp:birthDate": {
+          "index": "not_analyzed",
+          "type": "date",
+          "format": "yyyy-MM-dd||yyyy"
+        },
+        "dbp:deathDate": {
+          "index": "not_analyzed",
+          "type": "date",
+          "format": "yyyy-MM-dd||yyyy"
+        },
         "dbp:genre": {
           "index": "not_analyzed",
           "type": "string"
