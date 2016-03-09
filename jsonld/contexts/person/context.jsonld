@@ -14,6 +14,12 @@
     "dbp:deathYear": {
       "@type": "http://www.w3.org/2001/XMLSchema#gYear"
     },
+    "dbp:birthDate": {
+      "@type": "http://www.w3.org/2001/XMLSchema#date"
+    },
+    "dbp:deathDate": {
+      "@type": "http://www.w3.org/2001/XMLSchema#date"
+    },
     "schema:birthDate": {
       "@type": "http://www.w3.org/2001/XMLSchema#gYear"
     },
