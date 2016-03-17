@@ -26,6 +26,33 @@
     "dbp:pseudonym": {
       "@container": "@language"
     },
+    "lsb:dbpBirthPlaceAsLiteral": {
+      "@container": "@language"
+    },
+    "lsb:dbpDeathPlaceAsLiteral": {
+      "@container": "@language"
+    },
+    "lsb:dbpGenreAsLiteral": {
+      "@container": "@language"
+    },
+    "lsb:dbpMovementAsLiteral": {
+      "@container": "@language"
+    },
+    "lsb:dbpNationalityAsLiteral": {
+      "@container": "@language"
+    },
+    "lsb:dbpOccupationAsLiteral": {
+      "@container": "@language"
+    },
+    "lsb:dbpPartnerAsLiteral": {
+      "@container": "@language"
+    },
+    "lsb:dbpSpouseAsLiteral": {
+      "@container": "@language"
+    },
+    "lsb:dbpInfluencedByAsLiteral": {
+      "@container": "@language"
+    },
     "dbp:birthPlace": {
       "@type": "@id"
     },
@@ -59,13 +86,10 @@
     "dbp:spouse": {
       "@type": "@id"
     },
-    "dbp:author": {
-      "@type": "@id"
-    },
     "dbp:influenced": {
       "@type": "@id"
     },
-    "owl:differentFrom": {
+    "schema:creator": {
       "@type": "@id"
     },
     "schema:gender": {

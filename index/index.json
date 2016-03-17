@@ -35,7 +35,7 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
   },
   "mappings": {
     "_default_": {
-      "dynamic": "strict",
+      "dynamic": "false",
       "properties": {
         "@context": {
           "index": "not_analyzed",
@@ -304,14 +304,26 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
           "type": "string"
         },
         "dbp:pseudonym": {
-          "type": "string",
-          "analyzer": "autocomplete"
+          "properties": {
+            "de": {
+              "type": "string",
+              "analyzer": "german"
+            },
+            "en": {
+              "type": "string",
+              "analyzer": "english"
+            },
+            "fr": {
+              "type": "string",
+              "analyzer": "french"
+            },
+            "it": {
+              "type": "string",
+              "analyzer": "italian"
+            }
+          }
         },
         "dbp:spouse": {
-          "index": "not_analyzed",
-          "type": "string"
-        },
-        "dbp:author": {
           "index": "not_analyzed",
           "type": "string"
         },
@@ -319,13 +331,205 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
           "index": "not_analyzed",
           "type": "string"
         },
-        "dc:identifier": {
-          "index": "not_analyzed",
-          "type": "string"
+        "lsb:schemaGenderAsLiteral": {
+          "properties": {
+            "de": {
+              "type": "string",
+              "analyzer": "german"
+            },
+            "en": {
+              "type": "string",
+              "analyzer": "english"
+            },
+            "fr": {
+              "type": "string",
+              "analyzer": "french"
+            },
+            "it": {
+              "type": "string",
+              "analyzer": "italian"
+            }
+          }
         },
-        "owl:differentFrom": {
-          "index": "not_analyzed",
-          "type": "string"
+        "lsb:dbpBirthPlaceAsLiteral": {
+          "properties": {
+            "de": {
+              "type": "string",
+              "analyzer": "german"
+            },
+            "en": {
+              "type": "string",
+              "analyzer": "english"
+            },
+            "fr": {
+              "type": "string",
+              "analyzer": "french"
+            },
+            "it": {
+              "type": "string",
+              "analyzer": "italian"
+            }
+          }
+        },
+        "lsb:dbpDeathPlaceAsLiteral": {
+          "properties": {
+            "de": {
+              "type": "string",
+              "analyzer": "german"
+            },
+            "en": {
+              "type": "string",
+              "analyzer": "english"
+            },
+            "fr": {
+              "type": "string",
+              "analyzer": "french"
+            },
+            "it": {
+              "type": "string",
+              "analyzer": "italian"
+            }
+          }
+        },
+        "lsb:dbpGenreAsLiteral": {
+          "properties": {
+            "de": {
+              "type": "string",
+              "analyzer": "german"
+            },
+            "en": {
+              "type": "string",
+              "analyzer": "english"
+            },
+            "fr": {
+              "type": "string",
+              "analyzer": "french"
+            },
+            "it": {
+              "type": "string",
+              "analyzer": "italian"
+            }
+          }
+        },
+        "lsb:dbpMovementAsLiteral": {
+          "properties": {
+            "de": {
+              "type": "string",
+              "analyzer": "german"
+            },
+            "en": {
+              "type": "string",
+              "analyzer": "english"
+            },
+            "fr": {
+              "type": "string",
+              "analyzer": "french"
+            },
+            "it": {
+              "type": "string",
+              "analyzer": "italian"
+            }
+          }
+        },
+        "lsb:dbpNationalityAsLiteral": {
+          "properties": {
+            "de": {
+              "type": "string",
+              "analyzer": "german"
+            },
+            "en": {
+              "type": "string",
+              "analyzer": "english"
+            },
+            "fr": {
+              "type": "string",
+              "analyzer": "french"
+            },
+            "it": {
+              "type": "string",
+              "analyzer": "italian"
+            }
+          }
+        },
+        "lsb:dbpOccupationAsLiteral": {
+          "properties": {
+            "de": {
+              "type": "string",
+              "analyzer": "german"
+            },
+            "en": {
+              "type": "string",
+              "analyzer": "english"
+            },
+            "fr": {
+              "type": "string",
+              "analyzer": "french"
+            },
+            "it": {
+              "type": "string",
+              "analyzer": "italian"
+            }
+          }
+        },
+        "lsb:dbpPartnerAsLiteral": {
+          "properties": {
+            "de": {
+              "type": "string",
+              "analyzer": "german"
+            },
+            "en": {
+              "type": "string",
+              "analyzer": "english"
+            },
+            "fr": {
+              "type": "string",
+              "analyzer": "french"
+            },
+            "it": {
+              "type": "string",
+              "analyzer": "italian"
+            }
+          }
+        },
+        "lsb:dbpSpouseAsLiteral": {
+          "properties": {
+            "de": {
+              "type": "string",
+              "analyzer": "german"
+            },
+            "en": {
+              "type": "string",
+              "analyzer": "english"
+            },
+            "fr": {
+              "type": "string",
+              "analyzer": "french"
+            },
+            "it": {
+              "type": "string",
+              "analyzer": "italian"
+            }
+          }
+        },
+        "lsb:dbpInfluencedByAsLiteral": {
+          "properties": {
+            "de": {
+              "type": "string",
+              "analyzer": "german"
+            },
+            "en": {
+              "type": "string",
+              "analyzer": "english"
+            },
+            "fr": {
+              "type": "string",
+              "analyzer": "french"
+            },
+            "it": {
+              "type": "string",
+              "analyzer": "italian"
+            }
+          }
         },
         "schema:alternateName": {
           "type": "string",
@@ -338,10 +542,6 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
         "schema:deathDate": {
           "type": "date",
           "format": "year"
-        },
-        "schema:description": {
-          "type": "string",
-          "analyzer": "autocomplete"
         },
         "schema:familyName": {
           "type": "string",
@@ -359,67 +559,63 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
           "type": "string",
           "index": "not_analyzed"
         },
-        "schema:name": {
-          "type": "string",
-          "analyzer": "autocomplete"
-        },
         "rdf:type": {
           "index": "not_analyzed",
           "type": "string"
         }
       }
-    },
-    "organisation": {
-      "properties": {
-        "rdfs:label": {
-          "type": "string",
-          "analyzer": "autocomplete"
-        }
+    }
+  },
+  "organisation": {
+    "properties": {
+      "rdfs:label": {
+        "type": "string",
+        "analyzer": "autocomplete"
       }
-    },
-    "work": {
-      "properties": {
-        "dct:contributor": {
-          "index": "not_analyzed",
-          "type": "string"
+    }
+  },
+  "work": {
+    "properties": {
+      "dct:contributor": {
+        "index": "not_analyzed",
+        "type": "string"
+      },
+      "bf:hasInstance": {
+        "index": "not_analyzed",
+        "type": "string"
+      },
+      "dct:title": {
+        "fields": {
+          "folded": {
+            "analyzer": "text_folded",
+            "type": "string"
+          }
         },
-        "bf:hasInstance": {
-          "index": "not_analyzed",
-          "type": "string"
-        },
-        "dct:title": {
-          "fields": {
-            "folded": {
-              "analyzer": "text_folded",
-              "type": "string"
-            }
-          },
-          "type": "string"
-        }
+        "type": "string"
       }
-    },
-    "item": {
-      "properties": {
-        "bf:holdingFor": {
-          "index": "not_analyzed",
-          "type": "string"
-        },
-        "foaf:page": {
-          "index": "not_analyzed",
-          "type": "string"
-        },
-        "bibo:locator": {
-          "analyzer": "autocomplete",
-          "type": "string"
-        },
-        "bibo:owner": {
-          "index": "not_analyzed",
-          "type": "string"
-        },
-        "bf:subLocation": {
-          "analyzer": "autocomplete",
-          "type": "string"
-        }
+    }
+  },
+  "item": {
+    "properties": {
+      "bf:holdingFor": {
+        "index": "not_analyzed",
+        "type": "string"
+      },
+      "foaf:page": {
+        "index": "not_analyzed",
+        "type": "string"
+      },
+      "bibo:locator": {
+        "analyzer": "autocomplete",
+        "type": "string"
+      },
+      "bibo:owner": {
+        "index": "not_analyzed",
+        "type": "string"
+      },
+      "bf:subLocation": {
+        "analyzer": "autocomplete",
+        "type": "string"
       }
     }
   }
