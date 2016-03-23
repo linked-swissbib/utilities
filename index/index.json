@@ -331,26 +331,6 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
           "index": "not_analyzed",
           "type": "string"
         },
-        "lsb:schemaGenderAsLiteral": {
-          "properties": {
-            "de": {
-              "type": "string",
-              "analyzer": "german"
-            },
-            "en": {
-              "type": "string",
-              "analyzer": "english"
-            },
-            "fr": {
-              "type": "string",
-              "analyzer": "french"
-            },
-            "it": {
-              "type": "string",
-              "analyzer": "italian"
-            }
-          }
-        },
         "lsb:dbpBirthPlaceAsLiteral": {
           "properties": {
             "de": {
@@ -512,6 +492,46 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
           }
         },
         "lsb:dbpInfluencedByAsLiteral": {
+          "properties": {
+            "de": {
+              "type": "string",
+              "analyzer": "german"
+            },
+            "en": {
+              "type": "string",
+              "analyzer": "english"
+            },
+            "fr": {
+              "type": "string",
+              "analyzer": "french"
+            },
+            "it": {
+              "type": "string",
+              "analyzer": "italian"
+            }
+          }
+        },
+        "lsb:dbpInfluencedAsLiteral": {
+          "properties": {
+            "de": {
+              "type": "string",
+              "analyzer": "german"
+            },
+            "en": {
+              "type": "string",
+              "analyzer": "english"
+            },
+            "fr": {
+              "type": "string",
+              "analyzer": "french"
+            },
+            "it": {
+              "type": "string",
+              "analyzer": "italian"
+            }
+          }
+        },
+        "lsb:dbpNotableWorkAsLiteral": {
           "properties": {
             "de": {
               "type": "string",
