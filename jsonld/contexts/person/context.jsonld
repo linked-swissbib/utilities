@@ -53,6 +53,12 @@
     "lsb:dbpInfluencedByAsLiteral": {
       "@container": "@language"
     },
+    "lsb:dbpInfluencedAsLiteral": {
+      "@container": "@language"
+    },
+    "lsb:dbpNotableWorkAsLiteral": {
+      "@container": "@language"
+    },
     "dbp:birthPlace": {
       "@type": "@id"
     },
@@ -87,9 +93,6 @@
       "@type": "@id"
     },
     "dbp:influenced": {
-      "@type": "@id"
-    },
-    "schema:creator": {
       "@type": "@id"
     },
     "schema:gender": {

@@ -77,56 +77,8 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
           "type": "string"
         },
         "dct:contributor": {
-          "properties": {
-            "foaf:Organization": {
-              "properties": {
-                "@id": {
-                  "type": "string",
-                  "index": "not_analyzed"
-                },
-                "rdfs:label": {
-                  "type": "string",
-                  "index": "not_analyzed"
-                }
-              }
-            },
-            "foaf:Person": {
-              "properties": {
-                "@id": {
-                  "index": "not_analyzed",
-                  "type": "string"
-                },
-                "dbp:birthYear": {
-                  "format": "year",
-                  "type": "date"
-                },
-                "dbp:deathYear": {
-                  "format": "year",
-                  "type": "date"
-                },
-                "foaf:firstName": {
-                  "type": "string",
-                  "analyzer": "autocomplete"
-                },
-                "foaf:lastName": {
-                  "type": "string",
-                  "analyzer": "autocomplete"
-                },
-                "foaf:name": {
-                  "type": "string",
-                  "analyzer": "autocomplete"
-                },
-                "rdfs:label": {
-                  "analyzer": "autocomplete",
-                  "type": "string"
-                },
-                "skos:note": {
-                  "type": "string",
-                  "analyzer": "text_folded"
-                }
-              }
-            }
-          }
+          "type": "string",
+          "index": "not_analyzed"
         },
         "dc:format": {
           "type": "string"
@@ -379,26 +331,6 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
           "index": "not_analyzed",
           "type": "string"
         },
-        "lsb:schemaGenderAsLiteral": {
-          "properties": {
-            "de": {
-              "type": "string",
-              "analyzer": "german"
-            },
-            "en": {
-              "type": "string",
-              "analyzer": "english"
-            },
-            "fr": {
-              "type": "string",
-              "analyzer": "french"
-            },
-            "it": {
-              "type": "string",
-              "analyzer": "italian"
-            }
-          }
-        },
         "lsb:dbpBirthPlaceAsLiteral": {
           "properties": {
             "de": {
@@ -560,6 +492,46 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
           }
         },
         "lsb:dbpInfluencedByAsLiteral": {
+          "properties": {
+            "de": {
+              "type": "string",
+              "analyzer": "german"
+            },
+            "en": {
+              "type": "string",
+              "analyzer": "english"
+            },
+            "fr": {
+              "type": "string",
+              "analyzer": "french"
+            },
+            "it": {
+              "type": "string",
+              "analyzer": "italian"
+            }
+          }
+        },
+        "lsb:dbpInfluencedAsLiteral": {
+          "properties": {
+            "de": {
+              "type": "string",
+              "analyzer": "german"
+            },
+            "en": {
+              "type": "string",
+              "analyzer": "english"
+            },
+            "fr": {
+              "type": "string",
+              "analyzer": "french"
+            },
+            "it": {
+              "type": "string",
+              "analyzer": "italian"
+            }
+          }
+        },
+        "lsb:dbpNotableWorkAsLiteral": {
           "properties": {
             "de": {
               "type": "string",

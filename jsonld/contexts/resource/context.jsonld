@@ -22,6 +22,9 @@
     "dbp:originalLanguage": {
       "@type": "@id"
     },
+    "dct:contributor": {
+      "@type": "@id"
+    },
     "dct:isPartOf": {
       "@type": "@id"
     },
