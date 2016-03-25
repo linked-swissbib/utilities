@@ -57,6 +57,10 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
           "index": "not_analyzed",
           "type": "string"
         },
+        "bf:work": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
         "bibo:edition": {
           "type": "string"
         },
