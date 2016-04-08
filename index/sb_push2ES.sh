@@ -17,7 +17,7 @@ CURRENT_TIMESTAMP=`date +%Y%m%d%H%M%S`
 
 function usage()
 {
- printf "usage: $0 -o[BASEDIR json files] -u[url index server] -l[base dir log]"
+ printf "usage: $0 -o[BASEDIR json files] -u[url index server] -c[username:password] -l[base dir log]"
  echo ""
 
 }
@@ -54,6 +54,11 @@ function preChecks()
             echo "ERROR : base directory -->>${LOG_DIR}<<-- for logging files does not exist!\n"  && usage && exit 9
     fi
 
+    if [ ! -n "${CREDENTIALS}" ]
+    then
+	    echo "option -c [CREDENTIALS] not set" && usage && exit 9
+    fi
+
 
 
     #-z: the length of string is zero
@@ -85,7 +90,7 @@ function push2ES ()
 
             printf "starting to push file <%s> to ES \n\n" ${DOCS_BASEDIR_OUTPUT}/${subdir}/${jsonFile} >> ${LOGFILE_CURL}
 
-            curl -s -XPOST ${URLINDEXSERVER}/_bulk --data-binary @${DOCS_BASEDIR_OUTPUT}/${subdir}/${jsonFile} >> ${LOGFILE_CURL} 2>&1
+            curl -u ${CREDENTIALS} -s -XPOST ${URLINDEXSERVER}/_bulk --data-binary @${DOCS_BASEDIR_OUTPUT}/${subdir}/${jsonFile} >> ${LOGFILE_CURL} 2>&1
 
             echo "\n\n" >> ${LOGFILE_CURL}
 
@@ -111,6 +116,8 @@ do
     ;;
     l) LOG_DIR=$OPTARG              #Logdirectory
     ;;
+    c) CREDENTIALS=$OPTARG 		# Credentials for ES access
+	    ;;
     *) printf "unknown option -%c\n" $OPTION; usage; exit;;
   esac
 done
