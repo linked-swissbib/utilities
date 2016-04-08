@@ -104,7 +104,7 @@ function push2ES ()
 
 }
 
-while getopts ho:u:l: OPTION
+while getopts ho:u:l:c: OPTION
 do
   case $OPTION in
     h) usage
