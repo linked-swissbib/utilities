@@ -588,58 +588,58 @@ WARNING: File is not compliant with the JSON standard - remove comments before i
           "type": "string"
         }
       }
-    }
-  },
-  "organisation": {
-    "properties": {
-      "rdfs:label": {
-        "type": "string",
-        "analyzer": "autocomplete"
+    },
+    "organisation": {
+      "properties": {
+        "rdfs:label": {
+          "type": "string",
+          "analyzer": "autocomplete"
+        }
       }
-    }
-  },
-  "work": {
-    "properties": {
-      "dct:contributor": {
-        "index": "not_analyzed",
-        "type": "string"
-      },
-      "bf:hasInstance": {
-        "index": "not_analyzed",
-        "type": "string"
-      },
-      "dct:title": {
-        "fields": {
-          "folded": {
-            "analyzer": "text_folded",
-            "type": "string"
-          }
+    },
+    "work": {
+      "properties": {
+        "dct:contributor": {
+          "index": "not_analyzed",
+          "type": "string"
         },
-        "type": "string"
+        "bf:hasInstance": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "dct:title": {
+          "fields": {
+            "folded": {
+              "analyzer": "text_folded",
+              "type": "string"
+            }
+          },
+          "type": "string"
+        }
       }
-    }
-  },
-  "item": {
-    "properties": {
-      "bf:holdingFor": {
-        "index": "not_analyzed",
-        "type": "string"
-      },
-      "foaf:page": {
-        "index": "not_analyzed",
-        "type": "string"
-      },
-      "bibo:locator": {
-        "analyzer": "autocomplete",
-        "type": "string"
-      },
-      "bibo:owner": {
-        "index": "not_analyzed",
-        "type": "string"
-      },
-      "bf:subLocation": {
-        "analyzer": "autocomplete",
-        "type": "string"
+    },
+    "item": {
+      "properties": {
+        "bf:holdingFor": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "foaf:page": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "bibo:locator": {
+          "analyzer": "autocomplete",
+          "type": "string"
+        },
+        "bibo:owner": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "bf:subLocation": {
+          "analyzer": "autocomplete",
+          "type": "string"
+        }
       }
     }
   }
