@@ -22,25 +22,29 @@ set -o nounset                              # Treat unset variables as an error
 # Set default paths (don't change them unless you know what you are doing)
 fileloc=$(readlink -f $0)
 ROOTDIR=${fileloc%/*}
+
 LOGDIR=$ROOTDIR/logs
+APPDIR=$ROOTDIR/apps
+DATADIR=$ROOTDIR/data
+
 LOGFILE=$LOGDIR/lsb.log
-MF_HOME=$ROOTDIR/apps/mfWorkflows
-BASELINE=$MF_HOME/src/main/resources/transformation/baseLine.flux
-ENRICHEDLINE=$MF_HOME/src/main/resources/transformation/enrichedLine.flux
-RESHAPER_SB=$ROOTDIR/apps/dummyLinkingWrapper
-RESHAPER_DBP=$ROOTDIR/apps/dummyLinkingWrapper
-RESHAPER_VIAF=$ROOTDIR/apps/dummyLinkingWrapper
-LINKING=$ROOTDIR/apps/dummyLinkingWrapper
-WORKLINE=$ROOTDIR/apps/workConceptGenerator.jar
-GARBAGECOLLECTOR=$ROOTDIR/apps/garbageCollector.jar
-DELETELINE=$ROOTDIR/apps/deletebulk.py
-DELETEFOLDER=$ROOTDIR/data/deleteFolder
+MF_HOME=$APPDIR/mfWorkflows
+BASELINE=$MF_HOME/baseLine.flux
+ENRICHEDLINE=$MF_HOME/enrichedLine.flux
+RESHAPER_SB=$APPDIR/swissbib/preprocess_swissbib.sh
+RESHAPER_DBP=$APPDIR/dbpedia/preprocess_dbpedia.sh
+RESHAPER_VIAF=$APPDIR/viaf/preprocess_viaf.sh
+LINKING=$APPDIR/limes/do_parallel_linking.sh
+WORKLINE=$APPDIR/workConceptGenerator.jar
+GARBAGECOLLECTOR=$APPDIR/garbageCollector.jar
+DELETELINE=$APPDIR/deletebulk.py
+DELETEFOLDER=$DATADIR/deleteFolder
 SPARK_HOME=$SPARK_HOME
 SPARK_MASTER="local[*]"
-ES_CLUSTERNAME=elasticsearch
-ES_HTTP_HOST="localhost:9200"
-ES_TCP_HOST="localhost:9300"
-ES_INDEX=lsb
+ES_CLUSTERNAME=linked-swissbib
+ES_HTTP_HOST="sb-s2:8080"
+ES_TCP_HOST="sb-s2:9300"
+ES_INDEX=testsb_160803
 
 
 function log {
