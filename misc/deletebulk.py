@@ -20,15 +20,14 @@ and adds its resId to a list of to be removed documents in the Elasticsearch ind
 
 es = Elasticsearch(['http://localhost:9200'])
 index = 'testsb_160616'
-
-# Filenames need to have the format YYYYmmddHHMMSSffffff_ACTION_id
-p = re.compile('^([0-9]{20})_([A-Z]{6})_([a-zA-Z0-9]{9})\.xml')
+# Filenames need to have the format YYYY-mm-ddTHH:MM:SS.sss+zzzz_id_action
+p = re.compile('^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}\+0200)_([a-zA-Z0-9]{9})_([a-z]{6,7})\.xml')
 
 with open(argv[2], 'a') as tf:
     files = [f for f in listdir(argv[1]) if isfile(join(argv[1], f))]
     codes = []
     for f in files:
-        resId = p.match(f).group(3)
+        resId = p.match(f).group(2)
         tf.write('{ "delete" : { "_index" : "%s", "_type" : "bibliographicResource", "_id" : "%s" } }\n'
                  % (index, resId))
         tf.write('{ "delete" : { "_index" : "%s", "_type" : "document", "_id" : "%s" } }\n'
