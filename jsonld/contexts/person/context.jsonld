@@ -103,6 +103,9 @@
     },
     "rdf:type": {
       "@type": "@id"
+    },
+    "owl:sameAs": {
+      "@type": "@id"
     }
   }
 }
