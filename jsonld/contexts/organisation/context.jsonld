@@ -3,6 +3,9 @@
     "dbp": "http://dbpedia.org/ontology/",
     "foaf": "http://xmlns.com/foaf/0.1/",
     "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
-    "vcard": "http://www.w3.org/2006/vcard/ns#"
+    "vcard": "http://www.w3.org/2006/vcard/ns#",
+    "owl:sameAs": {
+      "@type": "@id"
+    }
   }
 }
