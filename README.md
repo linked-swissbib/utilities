@@ -4,9 +4,6 @@ Scripts supporting the [linked.swissbib transformation workflow](https://github.
 ## marc
 Utils for transforming MARC-XML datasets
 
-## baseLine
-Utils supporting the transformation from MARC21 to JSON-LD
-
 ## ntriples
 Utils for analyzing N-Triples
 
@@ -16,9 +13,6 @@ Utils for analyzing N-Triples
 
 ## index
 Utils for creating and modifiying Elasticsearch indices
-
-## query
-Utils for querying Elasticsearch indices
 
 ## misc
 Miscellaneous tools
