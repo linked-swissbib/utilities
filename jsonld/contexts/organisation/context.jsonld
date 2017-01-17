@@ -4,7 +4,20 @@
     "foaf": "http://xmlns.com/foaf/0.1/",
     "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
     "vcard": "http://www.w3.org/2006/vcard/ns#",
+    "owl": "http://www.w3.org/2002/07/owl#",
     "owl:sameAs": {
+      "@type": "@id"
+    },
+    "foaf:homepage": {
+      "@type": "@id"
+    },
+    "foaf:phone": {
+      "@type": "@id"
+    },
+    "foaf:mbox": {
+      "@type": "@id"
+    },
+    "vcard:hasRegion": {
       "@type": "@id"
     }
   }
