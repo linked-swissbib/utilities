@@ -9,6 +9,14 @@ input or output data.
 
 Utils for transforming or analyzing MARC-XML datasets (the input data)
 
+### One-Liners
+
+#### Create index of identifiers in compressed MARC-XML files
+
+```sh
+zgrep -Pon '(?<=001">)(\d{9})' path_to_files/* > index
+```
+
 ## ntriples
 
 Utils for analyzing N-Triples (one of the output formats)
